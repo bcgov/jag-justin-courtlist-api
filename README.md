@@ -1,2 +1,2 @@
-# Retrieve-xml-rest
-This is a sample webservice
+# jag-justin-courtlist-api
+Ministry of Attorney General - JUSTIN Court List Data Extract
