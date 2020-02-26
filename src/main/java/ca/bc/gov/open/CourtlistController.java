@@ -1,4 +1,4 @@
-package ca.bc.gov.restxml;
+package ca.bc.gov.open;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
-public class RetrieveXmlController {
+public class CourtlistController {
 
 	@RequestMapping(value = "/retrieve", method = RequestMethod.GET)
 	@ResponseBody
-	public RetrieveXmlResponse retrieveXml() {
-		ResponseEntity<RetrieveXmlResponse> responseEntity = new RestTemplate()
-				.getForEntity("http://jsonplaceholder.typicode.com/posts/1", RetrieveXmlResponse.class);
+	public CourtlistResponse retrieveXml() {
+		ResponseEntity<CourtlistResponse> responseEntity = new RestTemplate()
+				.getForEntity("http://jsonplaceholder.typicode.com/posts/1", CourtlistResponse.class);
 		return responseEntity.getBody();
 	}
 

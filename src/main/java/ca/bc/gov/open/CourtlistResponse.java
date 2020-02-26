@@ -1,15 +1,15 @@
-package ca.bc.gov.restxml;
+package ca.bc.gov.open;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RetrieveXmlResponse {
+public class CourtlistResponse {
 	private String body;
 
-	public RetrieveXmlResponse() {
+	public CourtlistResponse() {
 	}
 
-	public RetrieveXmlResponse(String body) {
+	public CourtlistResponse(String body) {
 		super();
 		this.body = body;
 	}

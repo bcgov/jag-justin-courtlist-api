@@ -1,4 +1,4 @@
-package ca.bc.gov.restxml;
+package ca.bc.gov.open;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,16 +6,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class RetrieveXmlApplication extends SpringBootServletInitializer {
+public class CourtlistApiApplication extends SpringBootServletInitializer {
 
 	//Main method
 	public static void main(String[] args) {
-		SpringApplication.run(RetrieveXmlApplication.class, args);
+		SpringApplication.run(CourtlistApiApplication.class, args);
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(RetrieveXmlApplication.class);
+		return builder.sources(CourtlistApiApplication.class);
 	}
 
 }
