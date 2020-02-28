@@ -1,10 +1,10 @@
-package ca.bc.gov.open;
+package ca.bc.gov.jag.justin.ws;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CourtlistApiApplicationTests {
+class CourtlistDataExtractApplicationTests {
 
 	@Test
 	void contextLoads() {
