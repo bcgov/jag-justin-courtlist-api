@@ -1,10 +1,10 @@
-package ca.bc.gov.restxml;
+package ca.bc.gov.jag.justin.ws;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestXmlApplicationTests {
+class CourtlistDataExtractApplicationTests {
 
 	@Test
 	void contextLoads() {
