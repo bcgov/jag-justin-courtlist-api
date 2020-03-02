@@ -1,0 +1,120 @@
+package ca.bc.gov.jag.justin.ws;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+
+/**
+*
+* Tests for court list data extract service
+*
+* @author sivakaruna
+*
+*/
+class CourtlistDataExtractServiceTest {
+
+	public static MockWebServer mockBackEnd;
+	@InjectMocks
+	@Spy
+	CourtlistDataExtractService service;
+
+	@Mock
+	CourtlistDataExtractProperties properties;
+
+	@BeforeAll
+	static void setUp() throws IOException {
+		mockBackEnd = new MockWebServer();
+		mockBackEnd.start();
+	}
+
+	@AfterAll
+	static void tearDown() throws IOException {
+		mockBackEnd.shutdown();
+	}
+
+	@BeforeEach
+	void initialize() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		MockitoAnnotations.initMocks(this);
+		String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
+		Mockito.when(properties.getBaseUrl()).thenReturn(baseUrl);
+		Mockito.when(properties.getUsername()).thenReturn("username");
+		Mockito.when(properties.getPassword()).thenReturn("password");
+		Mockito.when(properties.getDataExtractUri()).thenReturn("uri");
+		Mockito.when(properties.getDataBufferSize()).thenReturn(1);
+
+		Method postConstruct = CourtlistDataExtractService.class.getDeclaredMethod("InitService");
+		postConstruct.setAccessible(true);
+		postConstruct.invoke(service);
+	}
+
+	@DisplayName("Success - data extract call")
+	@Test
+	public void testSuccess() {
+		String response = "<Success>Success</Success>";
+		MockResponse mockResponse = new MockResponse();
+		mockResponse.setBody(response);
+		mockResponse.addHeader("content-type: application/xml;");
+		mockResponse.setResponseCode(200);
+		mockBackEnd.enqueue(mockResponse);
+		ResponseEntity<String> res = service.extractData("01-JAN-2020", "02-JAN-2020");
+		Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
+		Assertions.assertEquals(response, res.getBody());
+	}
+
+	@DisplayName("Missing param - data extract call")
+	@Test
+	public void testMissingParams() {
+		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.MISSING_PARAMS_ERROR
+				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
+		ResponseEntity<String> res = service.extractData(null, "02-JAN-2020");
+		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+		Assertions.assertEquals(response, res.getBody());
+	}
+
+	@DisplayName("Invalid param - data extract call")
+	@Test
+	public void testInvalidParams() {
+		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.INVALID_PARAMS_ERROR
+				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
+		ResponseEntity<String> res = service.extractData("Jan 01 2020", "02-JAN-2020");
+		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+		Assertions.assertEquals(response, res.getBody());
+	}
+
+	@DisplayName("Run time Error - data extract call")
+	@Test
+	public void testRunTimeException() throws IOException {
+		mockBackEnd.shutdown();
+		ResponseEntity<String> res = service.extractData("01-JAN-2020", "02-JAN-2020");
+		setUp();
+		Assertions.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, res.getStatusCode());
+	}
+
+	@DisplayName("Authorization Error - data extract call")
+	@Test
+	public void testUnauthorizedException() throws IOException {
+		MockResponse mockResponse = new MockResponse();
+		mockResponse.setResponseCode(401);
+		mockBackEnd.enqueue(mockResponse);
+		ResponseEntity<String> res = service.extractData("01-JAN-2020", "02-JAN-2020");
+		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, res.getStatusCode());
+	}
+
+}
