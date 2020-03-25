@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,9 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
 import reactor.core.publisher.Mono;
 
 /**
@@ -52,7 +57,12 @@ public class CourtlistDataExtractService {
 	@Autowired
 	CourtlistDataExtractProperties properties;
 
+	@Autowired
+	ObjectMapper objectMapper;
+
 	private WebClient webClient = null;
+
+	Logger logger = LoggerFactory.getLogger(CourtlistDataExtractService.class);
 
 	/**
 	 * Initialize web client
@@ -80,7 +90,7 @@ public class CourtlistDataExtractService {
 	 * @param endDate
 	 * @return
 	 */
-	public ResponseEntity<String> extractData(String startDate, String endDate) {
+	public ResponseEntity<?> extractData(String startDate, String endDate) {
 
 		try {
 			validateParams(startDate, endDate);
@@ -88,9 +98,10 @@ public class CourtlistDataExtractService {
 			// Build request url with the input parameters
 			String dataExtractUri = String.format(properties.getDataExtractUri(), startDate, endDate);
 
-			Mono<String> responseBody = this.webClient.get().uri(dataExtractUri).retrieve().bodyToMono(String.class);
-
-			return new ResponseEntity<String>(responseBody.block(), HttpStatus.OK);
+			Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
+					.bodyToMono(JustinCourtListDataType.class);
+            //logger.debug(" The extractData .. -> ", responseBody.block());
+			return new ResponseEntity<JustinCourtListDataType>(responseBody.block(), HttpStatus.OK);
 
 		} catch (CourtlistDataExtractException e) {
 			return new ResponseEntity<String>(String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE),
