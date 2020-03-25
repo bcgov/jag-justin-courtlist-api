@@ -35,7 +35,6 @@ class CourtlistDataExtractControllerTest {
 	@InjectMocks
 	CourtlistDataExtractController controller = new CourtlistDataExtractController();
 	
-	@InjectMocks
 	JustinCourtListDataType _response =new JustinCourtListDataType();
 
 	@DisplayName("Success - CourtlistDataExtractController")
