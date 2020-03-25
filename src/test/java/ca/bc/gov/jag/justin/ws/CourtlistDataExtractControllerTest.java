@@ -11,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
+
 import static org.mockito.ArgumentMatchers.any;
 
 /**
@@ -32,13 +34,16 @@ class CourtlistDataExtractControllerTest {
 
 	@InjectMocks
 	CourtlistDataExtractController controller = new CourtlistDataExtractController();
+	
+	@InjectMocks
+	JustinCourtListDataType _response =new JustinCourtListDataType();
 
 	@DisplayName("Success - CourtlistDataExtractController")
 	@Test
 	void test() {
-		Mockito.when(service.extractData(any(), any())).thenReturn(new ResponseEntity<>("success", HttpStatus.OK));
-		ResponseEntity<String> response = controller.extractData("startDate", "endDate");
-		Assertions.assertEquals("success", response.getBody());
+		Mockito.when(service.extractData(any(), any())).thenReturn(new ResponseEntity(_response,HttpStatus.OK));
+		ResponseEntity<?> response = controller.extractData("startDate", "endDate");
+		Assertions.assertTrue(_response.equals(response.getBody()));
 		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 

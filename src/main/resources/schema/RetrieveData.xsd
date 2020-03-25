@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Justin_Court_List_Data" type="Justin_Court_List_DataType"/>
+  <xs:complexType name="NextAppearanceType">
+    <xs:sequence>
+      <xs:element name="NextAppearanceCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="CNT"/>
+            <xs:enumeration value="FXD"/>
+            <xs:enumeration value="JIR"/>
+            <xs:enumeration value=""/>
+            <xs:enumeration value="APP"/>
+            <xs:enumeration value="FA"/>
+            <xs:enumeration value="CLC"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="NextAppearanceDesc">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Continuation of a trial or hearing"/>
+            <xs:enumeration value="To Fix a Date"/>
+            <xs:enumeration value="Judicial Interim Release"/>
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Application"/>
+            <xs:enumeration value="First Appearance"/>
+            <xs:enumeration value="To consult counsel"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Date" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="DispositionType">
+    <xs:sequence>
+      <xs:element name="FindingCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="G"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="FindingDesc">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Guilty"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="Details">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="No Results Entered"/>
+            <xs:enumeration value=""/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ChargeType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="ChargeDescription"/>
+      <xs:element name="ChargeLocation">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Kelowna BC"/>
+            <xs:enumeration value="Victoria BC"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="AgencyFile"/>
+      <xs:element name="ResultCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="IBD"/>
+            <xs:enumeration value="ADG"/>
+            <xs:enumeration value="WI"/>
+            <xs:enumeration value="IBJ"/>
+            <xs:enumeration value="END"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="ResultDesc">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Initiated by Defence-adjournment"/>
+            <xs:enumeration value="Adjourned Generally"/>
+            <xs:enumeration value="Bench Warrant issued"/>
+            <xs:enumeration value="Initiated by Judge/Justice-adjournment"/>
+            <xs:enumeration value="Concluded"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="NextAppearanceType" name="NextAppearance"/>
+      <xs:element type="DispositionType" name="Disposition"/>
+    </xs:sequence>
+    <xs:attribute type="xs:byte" name="ChgCount" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ParticipantType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="Surname"/>
+      <xs:element type="xs:string" name="GivenName"/>
+      <xs:element name="Initials">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="J. "/>
+            <xs:enumeration value="A. J."/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="Birthdate">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="12-JUN-1995"/>
+            <xs:enumeration value="15-DEC-1967"/>
+            <xs:enumeration value="01-JAN-1988"/>
+            <xs:enumeration value="01-JAN-1965"/>
+            <xs:enumeration value="15-JAN-1978"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="Ban">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Publication - CCC 486.4 3
+Publication - CCC 486.4 2"/>
+            <xs:enumeration value="Inherent Jurisdiction -  
+Publication - CCC 486.4 1"/>
+            <xs:enumeration value="Publication -  "/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="BailCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="NP"/>
+            <xs:enumeration value="UTA"/>
+            <xs:enumeration value="DO"/>
+            <xs:enumeration value="OR"/>
+            <xs:enumeration value="ROD"/>
+            <xs:enumeration value="AN"/>
+            <xs:enumeration value="WAR"/>
+            <xs:enumeration value="ARR"/>
+            <xs:enumeration value="RIC"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="BailDesc">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="No Process to Issue"/>
+            <xs:enumeration value="Undertaking to Appear"/>
+            <xs:enumeration value="Arrested"/>
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Warrant"/>
+            <xs:enumeration value="Warrant Requested"/>
+            <xs:enumeration value="Appearance Notice"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="InCustody">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="N"/>
+            <xs:enumeration value="Y"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="ChargeType" name="Charge" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="FileType">
+    <xs:sequence>
+      <xs:element type="ParticipantType" name="Participant" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Number" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="AppearanceType" mixed="true">
+    <xs:sequence>
+      <xs:element type="FileType" name="File" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Date" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="LocationType">
+    <xs:sequence>
+      <xs:element type="AppearanceType" name="Appearance" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Court" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="PLMS_Court_ListType">
+    <xs:sequence>
+      <xs:element type="LocationType" name="Location" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Type"/>
+  </xs:complexType>
+  <xs:complexType name="Justin_Court_List_DataType">
+    <xs:sequence>
+      <xs:element type="PLMS_Court_ListType" name="PLMS_Court_List"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="EndDate"/>
+    <xs:attribute type="xs:string" name="StartDate"/>
+    <xs:attribute type="xs:string" name="Extract"/>
+  </xs:complexType>
+</xs:schema>
