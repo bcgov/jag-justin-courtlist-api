@@ -72,6 +72,8 @@ public class CourtlistDataExtractService {
 	public static final String UNKOWN_ERROR = "Unknown error occured";
 
 	public static final String ERROR_RESPONSE_CODE = "-1";
+	
+	public static final String TRANSFORM_Error = "Failed to perform transformation";
 
 	@Autowired
 	CourtlistDataExtractProperties properties;
@@ -160,6 +162,7 @@ public class CourtlistDataExtractService {
 			return transformToHtml(responseBody.block());
 
 		} catch (CourtlistDataExtractException e) {
+			return String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE);
 
 		} catch (DataBufferLimitException e) {
 			return  String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE);
@@ -193,8 +196,9 @@ public class CourtlistDataExtractService {
 	}
 
 	private String transformToHtml(String response)
-			throws ParserConfigurationException, TransformerConfigurationException {
+			throws ParserConfigurationException, TransformerConfigurationException,TransformerException,SAXException, IOException {
 		try {
+			logger.info("Performing transformation.. ");
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(new InputSource(new StringReader(response)));
@@ -216,14 +220,26 @@ public class CourtlistDataExtractService {
 		}
 
 		catch (ParserConfigurationException e) {
-			return "";
+			//throw e;
+			logger.error("Error occured while parsing" + e.getMessage());
+			 return "Error occured while parsing " + e.getMessage() ;
 		} catch (TransformerException e) {
-			return "";
+			//throw e;
+			return "Error TransformerException occured " + e.getMessage();
 		} catch (IOException e) {
-			return "";
+			//throw e;
+			logger.error("Error IO Exception occured");
+			return "Error IO Exception occured " + e.getMessage();
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
-			return "";
+			//throw e;
+			logger.error("Error : SAXException occured");
+			return "Error : SAXException occured " + e.getMessage();
+		}
+		catch (Exception e) {
+			logger.error("Error occured in transformToHtml");
+			return "Error occured in transformToHtml " + e.getMessage();
+			//throw e;
 		}
 
 	}
