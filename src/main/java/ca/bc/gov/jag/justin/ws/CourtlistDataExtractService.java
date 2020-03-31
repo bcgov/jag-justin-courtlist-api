@@ -1,14 +1,30 @@
 package ca.bc.gov.jag.justin.ws;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -60,6 +79,9 @@ public class CourtlistDataExtractService {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	@Autowired
+	private ResourceLoader resourceLoader;
+
 	private WebClient webClient = null;
 
 	Logger logger = LoggerFactory.getLogger(CourtlistDataExtractService.class);
@@ -100,7 +122,7 @@ public class CourtlistDataExtractService {
 
 			Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
 					.bodyToMono(JustinCourtListDataType.class);
-            //logger.debug(" The extractData .. -> ", responseBody.block());
+			// logger.debug(" The extractData .. -> ", responseBody.block());
 			return new ResponseEntity<JustinCourtListDataType>(responseBody.block(), HttpStatus.OK);
 
 		} catch (CourtlistDataExtractException e) {
@@ -125,6 +147,35 @@ public class CourtlistDataExtractService {
 
 	}
 
+	public String extractData1(String startDate, String endDate) {
+
+		try {
+			validateParams(startDate, endDate);
+
+			// Build request url with the input parameters
+			String dataExtractUri = String.format(properties.getDataExtractUri(), startDate, endDate);
+
+			Mono<String> responseBody = this.webClient.get().uri(dataExtractUri).retrieve().bodyToMono(String.class);
+			// convert the response to html 
+			return transformToHtml(responseBody.block());
+
+		} catch (CourtlistDataExtractException e) {
+
+		} catch (DataBufferLimitException e) {
+			return  String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE);
+
+		} catch (WebClientResponseException e) {
+
+		} catch (RuntimeException e) {
+			return String.format(ERROR_RESPONSE_XML, SERVICE_UNAVAILABLE_ERROR, ERROR_RESPONSE_CODE);
+
+		} catch (Exception e) {
+			return String.format(ERROR_RESPONSE_XML, UNKOWN_ERROR, ERROR_RESPONSE_CODE);
+		}
+		return null;
+
+	}
+
 	/**
 	 * Validate input parameters
 	 * 
@@ -141,4 +192,39 @@ public class CourtlistDataExtractService {
 		}
 	}
 
+	private String transformToHtml(String response)
+			throws ParserConfigurationException, TransformerConfigurationException {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(response)));
+			// Get the XSLT file
+			File xsl = new ClassPathResource("courtlist.xslt").getFile();
+
+			TransformerFactory transfomerFactory = TransformerFactory.newInstance();
+			// Obtain the XSLT transformer
+
+			StreamSource style = new StreamSource(xsl);
+			Transformer transformer = transfomerFactory.newTransformer(style);
+
+			DOMSource source = new DOMSource(doc);
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			transformer.transform(source, result);
+			String strResult = writer.toString();
+			return strResult;
+		}
+
+		catch (ParserConfigurationException e) {
+			return "";
+		} catch (TransformerException e) {
+			return "";
+		} catch (IOException e) {
+			return "";
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			return "";
+		}
+
+	}
 }
