@@ -221,24 +221,24 @@ public class CourtlistDataExtractService {
 
 		catch (ParserConfigurationException e) {
 			//throw e;
-			logger.error("Error occured while parsing");
-			 return "Error occured while parsing " ;
+			logger.error("Error occured while parsing" + e.getMessage());
+			 return "Error occured while parsing " + e.getMessage() ;
 		} catch (TransformerException e) {
 			//throw e;
-			return "Error TransformerException occured";
+			return "Error TransformerException occured " + e.getMessage();
 		} catch (IOException e) {
 			//throw e;
 			logger.error("Error IO Exception occured");
-			return "Error IO Exception occured";
+			return "Error IO Exception occured " + e.getMessage();
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			//throw e;
 			logger.error("Error : SAXException occured");
-			return "Error : SAXException occured" ;
+			return "Error : SAXException occured " + e.getMessage();
 		}
 		catch (Exception e) {
 			logger.error("Error occured in transformToHtml");
-			return "Error occured in transformToHtml";
+			return "Error occured in transformToHtml " + e.getMessage();
 			//throw e;
 		}
 
