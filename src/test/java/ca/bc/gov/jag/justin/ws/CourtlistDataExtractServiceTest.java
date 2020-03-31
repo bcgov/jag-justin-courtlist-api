@@ -100,6 +100,20 @@ class CourtlistDataExtractServiceTest {
 		String serviceResponse = jaxbObjectToXML(res.getBody());
 		Assertions.assertEquals(response, serviceResponse);
 	}
+	
+	@DisplayName("Success - data extract call")
+	@Test
+	public void testHTMLSuccess() throws JsonProcessingException {
+		String response = successResponseObject();
+		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
+		MockResponse mockResponse = new MockResponse();
+		mockResponse.setBody(response);
+		mockResponse.addHeader("content-type: application/xml;");
+		mockResponse.setResponseCode(200);
+		mockBackEnd.enqueue(mockResponse);
+		String res = service.extractData1("01-JAN-2020", "02-JAN-2020");
+		Assertions.assertNotEquals("", res);
+	}
 
 	@DisplayName("Missing param - data extract call")
 	@Test
