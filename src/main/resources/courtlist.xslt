@@ -43,7 +43,7 @@
 
 
 <tr>
-<th colspan="8" alighn="left"> File Number:<xsl:value-of select="@Number"></xsl:value-of>
+<th colspan="8" align="left"> File Number:<xsl:value-of select="@Number"></xsl:value-of>
   </th>
 </tr>
 
@@ -75,10 +75,36 @@
     <td><xsl:value-of select="Participant/Ban"/></td>
     <td><xsl:value-of select="Participant/BailCode"/></td>
     <td><xsl:value-of select="Participant/BailDesc"/></td>
-    <td><xsl:value-of select="Participant/InCustody"/></td>
-
-   </tr>
-
+    <td><xsl:value-of select="Participant/InCustody"/></td></tr>
+	
+	<!-- <xsl:for-each select="File/Participant/Charge">-->
+    <xsl:for-each select="Participant/Charge">
+    
+	<tr>
+      <th colspan="8" align="left"> Charge Count:<xsl:value-of select="@ChgCount"></xsl:value-of>
+      </th>
+    </tr>
+	
+	<tr>
+   <td colspan="4">ChargeDescription </td>
+   <td>ChargeLocation</td>
+   <td>AgencyFile</td>
+      <td>ResultCode</td>
+	     <td>ResultDesc</td>
+		 </tr>
+		 
+		 
+		 
+		 <tr>
+	<td colspan="4"><xsl:value-of select="ChargeDescription"/></td>
+    <td><xsl:value-of select="ChargeLocation"/></td>
+    <td><xsl:value-of select="AgencyFile"/></td>
+    <td><xsl:value-of select="ResultCode"/></td>
+    <td><xsl:value-of select="ResultDesc"/></td>
+    	 </tr>
+   
+	
+</xsl:for-each>
 
 </xsl:for-each>
 
