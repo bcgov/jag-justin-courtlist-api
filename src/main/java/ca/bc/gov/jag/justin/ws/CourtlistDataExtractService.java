@@ -2,6 +2,7 @@ package ca.bc.gov.jag.justin.ws;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.regex.Pattern;
@@ -203,7 +204,7 @@ public class CourtlistDataExtractService {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(new InputSource(new StringReader(response)));
 			// Get the XSLT file
-			File xsl = new ClassPathResource("courtlist.xslt").getFile();
+			InputStream xsl = new ClassPathResource("courtlist.xslt").getInputStream();
 
 			TransformerFactory transfomerFactory = TransformerFactory.newInstance();
 			// Obtain the XSLT transformer
