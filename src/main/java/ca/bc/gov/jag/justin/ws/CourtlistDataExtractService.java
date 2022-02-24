@@ -118,6 +118,9 @@ public class CourtlistDataExtractService {
 	public ResponseEntity<?> extractData(String startDate, String endDate) {
 
 		try {
+
+			logger.info("Try extract data");
+
 			validateParams(startDate, endDate);
 
 			// Build request url with the input parameters
@@ -129,21 +132,36 @@ public class CourtlistDataExtractService {
 			return new ResponseEntity<JustinCourtListDataType>(responseBody.block(), HttpStatus.OK);
 
 		} catch (CourtlistDataExtractException e) {
+
+			logger.error("Court list extract exception",e);
+
 			return new ResponseEntity<String>(String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE),
 					HttpStatus.BAD_REQUEST);
 		} catch (DataBufferLimitException e) {
+
+			logger.error("Data buffer exception",e);
+
 			return new ResponseEntity<String>(
 					String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.INSUFFICIENT_STORAGE);
 		} catch (WebClientResponseException e) {
+
+			logger.error("Web Client exception",e);
+
 			return new ResponseEntity<String>(
 					String.format(ERROR_RESPONSE_XML, UNAUTHORIZED_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.UNAUTHORIZED);
 		} catch (RuntimeException e) {
+
+			logger.error("Runtime exception",e);
+
 			return new ResponseEntity<String>(
 					String.format(ERROR_RESPONSE_XML, SERVICE_UNAVAILABLE_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.SERVICE_UNAVAILABLE);
 		} catch (Exception e) {
+
+			logger.error("exception",e);
+
 			return new ResponseEntity<String>(String.format(ERROR_RESPONSE_XML, UNKOWN_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -163,17 +181,29 @@ public class CourtlistDataExtractService {
 			return transformToHtml(responseBody.block());
 
 		} catch (CourtlistDataExtractException e) {
+
+			logger.error("Court list extract exception",e);
+
 			return String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE);
 
 		} catch (DataBufferLimitException e) {
-			return  String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE);
 
+			logger.error("Court list extract exception",e);
+
+			return  String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE);
 		} catch (WebClientResponseException e) {
+			logger.error("Web client exception",e);
 
 		} catch (RuntimeException e) {
+
+			logger.error("Runtime exception",e);
+
 			return String.format(ERROR_RESPONSE_XML, SERVICE_UNAVAILABLE_ERROR, ERROR_RESPONSE_CODE);
 
 		} catch (Exception e) {
+
+			logger.error("exception",e);
+
 			return String.format(ERROR_RESPONSE_XML, UNKOWN_ERROR, ERROR_RESPONSE_CODE);
 		}
 		return null;
@@ -221,26 +251,21 @@ public class CourtlistDataExtractService {
 		}
 
 		catch (ParserConfigurationException e) {
-			//throw e;
-			logger.error("Error occured while parsing" + e.getMessage());
+			logger.error("Error occured while parsing", e);
 			 return "Error occured while parsing " + e.getMessage() ;
 		} catch (TransformerException e) {
-			//throw e;
 			return "Error TransformerException occured " + e.getMessage();
 		} catch (IOException e) {
-			//throw e;
-			logger.error("Error IO Exception occured");
+			logger.error("Error IO Exception occured", e);
 			return "Error IO Exception occured " + e.getMessage();
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
-			//throw e;
-			logger.error("Error : SAXException occured");
+			logger.error("Error : SAXException occured", e);
 			return "Error : SAXException occured " + e.getMessage();
 		}
 		catch (Exception e) {
-			logger.error("Error occured in transformToHtml");
+			logger.error("Error occured in transformToHtml", e);
 			return "Error occured in transformToHtml " + e.getMessage();
-			//throw e;
 		}
 
 	}
