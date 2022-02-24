@@ -24,9 +24,9 @@ public class CourtlistDataExtractController {
 
 	@Autowired
 	CourtlistDataExtractService service;
-	
 
 	Logger logger = LoggerFactory.getLogger(CourtlistDataExtractController.class);
+
 
 	/**
 	 * Court list data extract end point controller
@@ -40,7 +40,9 @@ public class CourtlistDataExtractController {
 	@ResponseBody
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) {
-        
+
+		logger.info("Request for extract");
+
 		return service.extractData(startDate, endDate);
 
 	}
@@ -50,9 +52,9 @@ public class CourtlistDataExtractController {
 	@ResponseBody
 	public String extractData1(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) {
-		
-		//JustinCourtListDataType data = service.extractData1(startDate, endDate);
-       //  htmlservice.parseData(startDate, endDate);
+
+		logger.info("Request for extract 1");
+
 		return service.extractData1(startDate, endDate);
 
 	}
