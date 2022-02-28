@@ -38,7 +38,6 @@ import ca.bc.gov.jag.justin.objects.*;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-
 import static org.mockito.ArgumentMatchers.any;
 
 /**
@@ -49,35 +48,6 @@ import static org.mockito.ArgumentMatchers.any;
 *
 */
 class CourtlistDataExtractServiceTest {
-
-	private static final String expectedHtml = "<html>\r\n" +
-			"<body>\r\n" +
-			"<h1 align=\"center\">Justin_Court_List_Data</h1>\r\n" +
-			"<table border=\"3\" align=\"center\">\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">Start Date : </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">End Date : </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">Extract : </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">PLMS_Court_List Type: </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">Location Court: </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\">Appearance Date: </th>\r\n" +
-			"</tr>\r\n" +
-			"<tr>\r\n" +
-			"<th colspan=\"8\"></th>\r\n" +
-			"</tr>\r\n" +
-			"</table>\r\n" +
-			"</body>\r\n" +
-			"</html>\r\n";
 
 	public static MockWebServer mockBackEnd;
 	@InjectMocks
@@ -150,7 +120,7 @@ class CourtlistDataExtractServiceTest {
 		mockResponse.setResponseCode(200);
 		mockBackEnd.enqueue(mockResponse);
 		String res = service.getData("01-JAN-2020", "02-JAN-2020");
-		Assertions.assertEquals(expectedHtml, res);
+		Assertions.assertNotNull(res);
 
 	}
 
