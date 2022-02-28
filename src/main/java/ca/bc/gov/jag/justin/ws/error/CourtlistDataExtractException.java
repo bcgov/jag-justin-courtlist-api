@@ -1,4 +1,4 @@
-package ca.bc.gov.jag.justin.ws;
+package ca.bc.gov.jag.justin.ws.error;
 
 /**
  * 
@@ -13,10 +13,6 @@ public class CourtlistDataExtractException extends Exception {
 
 	public CourtlistDataExtractException(String message) {
 		super(message);
-	}
-
-	public CourtlistDataExtractException(String message, Throwable cause) {
-		super(message, cause);
 	}
 
 }

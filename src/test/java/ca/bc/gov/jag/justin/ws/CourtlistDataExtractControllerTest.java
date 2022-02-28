@@ -1,5 +1,8 @@
 package ca.bc.gov.jag.justin.ws;
 
+import ca.bc.gov.jag.justin.ws.api.CourtlistDataExtractController;
+import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
+import ca.bc.gov.jag.justin.ws.service.CourtlistDataExtractService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +42,7 @@ class CourtlistDataExtractControllerTest {
 
 	@DisplayName("Success - CourtlistDataExtractController")
 	@Test
-	void testExtractData() {
+	void testExtractData() throws CourtlistDataExtractException {
 
 		Mockito.when(service.extractData(any(), any())).thenReturn(new ResponseEntity(_response,HttpStatus.OK));
 		ResponseEntity<?> response = controller.extractData("startDate", "endDate");
@@ -50,7 +53,7 @@ class CourtlistDataExtractControllerTest {
 
 	@DisplayName("Success - CourtlistDataExtractController")
 	@Test
-	void testGetData() {
+	void testGetData() throws CourtlistDataExtractException {
 
 		Mockito.when(service.getData(any(), any())).thenReturn("SUCCESS");
 		String response = controller.getData("startDate", "endDate");

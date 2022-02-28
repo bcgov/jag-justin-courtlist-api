@@ -1,4 +1,4 @@
-package ca.bc.gov.jag.justin.ws;
+package ca.bc.gov.jag.justin.ws.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

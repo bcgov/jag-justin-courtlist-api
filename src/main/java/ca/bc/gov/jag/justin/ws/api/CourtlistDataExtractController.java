@@ -1,5 +1,7 @@
-package ca.bc.gov.jag.justin.ws;
+package ca.bc.gov.jag.justin.ws.api;
 
+import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
+import ca.bc.gov.jag.justin.ws.service.CourtlistDataExtractService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class CourtlistDataExtractController {
 			MediaType.APPLICATION_JSON_VALUE})
 	@ResponseBody
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
-			@RequestParam(value="endDate",required = false) String endDate) {
+			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
 		logger.info("Request for extract");
 
@@ -49,9 +51,9 @@ public class CourtlistDataExtractController {
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody
 	public String getData(@RequestParam(value="startDate",required = false) String startDate,
-						  @RequestParam(value="endDate",required = false) String endDate) {
+						  @RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
-		logger.info("Request for extract 1");
+		logger.info("Request for getData");
 
 		return service.getData(startDate, endDate);
 
