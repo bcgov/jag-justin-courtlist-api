@@ -1,4 +1,4 @@
-name: Build jrcc-loader Image
+name: Build court-list-ws Image
 on:
   push:
     branches:
