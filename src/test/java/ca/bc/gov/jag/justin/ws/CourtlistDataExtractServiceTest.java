@@ -120,7 +120,7 @@ class CourtlistDataExtractServiceTest {
 		mockResponse.setResponseCode(200);
 		mockBackEnd.enqueue(mockResponse);
 		String res = service.getData("01-JAN-2020", "02-JAN-2020");
-		Assertions.assertNotEquals("", res);
+		Assertions.assertNotNull(res);
 
 	}
 
@@ -142,6 +142,22 @@ class CourtlistDataExtractServiceTest {
 				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
 
 		Assertions.assertThrows(CourtlistDataExtractException.class, () -> service.extractData("Jan 01 2020", "02-JAN-2020"));
+
+	}
+
+	@DisplayName("Fail - data extract call")
+	@Test
+	public void testHTMLFail() throws JsonProcessingException, CourtlistDataExtractException {
+
+		String response = successResponseObject();
+		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
+		MockResponse mockResponse = new MockResponse();
+		mockResponse.setBody("{}");
+		mockResponse.addHeader("content-type: application/json;");
+		mockResponse.setResponseCode(200);
+		mockBackEnd.enqueue(mockResponse);
+		String res = service.getData("01-JAN-2020", "02-JAN-2020");
+		Assertions.assertEquals("Error occurred in transformToHtml Content is not allowed in prolog.", res);
 
 	}
 	
