@@ -2,14 +2,16 @@ name: Build jrcc-loader Image
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
     branches:
-      - main
+      - master
 
 jobs:
   app-version:
     uses: SierraSystems/reusable-workflows/.github/workflows/java-maven-app-version.yml@main
+    with:
+      working_directory: .
 
   build-image:
     uses: SierraSystems/reusable-workflows/.github/workflows/openshift-source-to-image.yml@main
