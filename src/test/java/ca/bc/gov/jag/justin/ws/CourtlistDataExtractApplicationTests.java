@@ -10,4 +10,9 @@ class CourtlistDataExtractApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void applicationContextTest() {
+		CourtlistDataExtractApplication.main(new String[] {});
+	}
+
 }
