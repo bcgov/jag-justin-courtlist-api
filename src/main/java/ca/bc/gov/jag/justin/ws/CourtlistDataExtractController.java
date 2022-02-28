@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
 /**
  *
  * Rest controller to retrieve data from court list data extract service
@@ -50,12 +48,12 @@ public class CourtlistDataExtractController {
 	@GetMapping(value = "/getData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody
-	public String extractData1(@RequestParam(value="startDate",required = false) String startDate,
-			@RequestParam(value="endDate",required = false) String endDate) {
+	public String getData(@RequestParam(value="startDate",required = false) String startDate,
+						  @RequestParam(value="endDate",required = false) String endDate) {
 
 		logger.info("Request for extract 1");
 
-		return service.extractData1(startDate, endDate);
+		return service.getData(startDate, endDate);
 
 	}
 

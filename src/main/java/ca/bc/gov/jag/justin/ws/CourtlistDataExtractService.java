@@ -1,6 +1,5 @@
 package ca.bc.gov.jag.justin.ws;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -12,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +34,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
 import reactor.core.publisher.Mono;
@@ -73,17 +69,9 @@ public class CourtlistDataExtractService {
 	public static final String UNKOWN_ERROR = "Unknown error occured";
 
 	public static final String ERROR_RESPONSE_CODE = "-1";
-	
-	public static final String TRANSFORM_Error = "Failed to perform transformation";
 
 	@Autowired
 	CourtlistDataExtractProperties properties;
-
-	@Autowired
-	ObjectMapper objectMapper;
-
-	@Autowired
-	private ResourceLoader resourceLoader;
 
 	private WebClient webClient = null;
 
@@ -128,47 +116,57 @@ public class CourtlistDataExtractService {
 
 			Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
 					.bodyToMono(JustinCourtListDataType.class);
-			// logger.debug(" The extractData .. -> ", responseBody.block());
+
 			return new ResponseEntity<JustinCourtListDataType>(responseBody.block(), HttpStatus.OK);
 
 		} catch (CourtlistDataExtractException e) {
 
 			logger.error("Court list extract exception",e);
 
-			return new ResponseEntity<String>(String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE),
+			return new ResponseEntity<>(String.format(ERROR_RESPONSE_XML, e.getMessage(), ERROR_RESPONSE_CODE),
 					HttpStatus.BAD_REQUEST);
+
 		} catch (DataBufferLimitException e) {
 
 			logger.error("Data buffer exception",e);
 
-			return new ResponseEntity<String>(
+			return new ResponseEntity<>(
 					String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.INSUFFICIENT_STORAGE);
+
 		} catch (WebClientResponseException e) {
 
 			logger.error("Web Client exception",e);
 
-			return new ResponseEntity<String>(
+			return new ResponseEntity<>(
 					String.format(ERROR_RESPONSE_XML, UNAUTHORIZED_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.UNAUTHORIZED);
+
 		} catch (RuntimeException e) {
 
 			logger.error("Runtime exception",e);
 
-			return new ResponseEntity<String>(
+			return new ResponseEntity<>(
 					String.format(ERROR_RESPONSE_XML, SERVICE_UNAVAILABLE_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.SERVICE_UNAVAILABLE);
+
 		} catch (Exception e) {
 
 			logger.error("exception",e);
 
-			return new ResponseEntity<String>(String.format(ERROR_RESPONSE_XML, UNKOWN_ERROR, ERROR_RESPONSE_CODE),
+			return new ResponseEntity<>(String.format(ERROR_RESPONSE_XML, UNKOWN_ERROR, ERROR_RESPONSE_CODE),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
 
-	public String extractData1(String startDate, String endDate) {
+	/**
+	 * Currently unsure of the purpose of this service
+	 * @param startDate request start
+	 * @param endDate request end
+	 * @return raw data
+	 */
+	public String getData(String startDate, String endDate) {
 
 		try {
 			validateParams(startDate, endDate);
@@ -191,7 +189,9 @@ public class CourtlistDataExtractService {
 			logger.error("Court list extract exception",e);
 
 			return  String.format(ERROR_RESPONSE_XML, BUFFER_LIMIT_EXCEEDED_ERROR, ERROR_RESPONSE_CODE);
+
 		} catch (WebClientResponseException e) {
+
 			logger.error("Web client exception",e);
 
 		} catch (RuntimeException e) {
@@ -226,8 +226,7 @@ public class CourtlistDataExtractService {
 		}
 	}
 
-	private String transformToHtml(String response)
-			throws ParserConfigurationException, TransformerConfigurationException,TransformerException,SAXException, IOException {
+	private String transformToHtml(String response) {
 		try {
 			logger.info("Performing transformation.. ");
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

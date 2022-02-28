@@ -26,7 +26,7 @@ class CourtlistDataExtractControllerTest {
 
 	@BeforeEach
 	public void initMocks() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 	}
 
 	@Mock
@@ -39,11 +39,23 @@ class CourtlistDataExtractControllerTest {
 
 	@DisplayName("Success - CourtlistDataExtractController")
 	@Test
-	void test() {
+	void testExtractData() {
+
 		Mockito.when(service.extractData(any(), any())).thenReturn(new ResponseEntity(_response,HttpStatus.OK));
 		ResponseEntity<?> response = controller.extractData("startDate", "endDate");
 		Assertions.assertTrue(_response.equals(response.getBody()));
 		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+	}
+
+	@DisplayName("Success - CourtlistDataExtractController")
+	@Test
+	void testGetData() {
+
+		Mockito.when(service.getData(any(), any())).thenReturn("SUCCESS");
+		String response = controller.getData("startDate", "endDate");
+		Assertions.assertEquals("SUCCESS", response);
+
 	}
 
 }
