@@ -12,6 +12,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import ca.bc.gov.jag.justin.ws.config.CourtlistDataExtractProperties;
+import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
+import ca.bc.gov.jag.justin.ws.service.CourtlistDataExtractService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -89,7 +92,7 @@ class CourtlistDataExtractServiceTest {
 
 	@DisplayName("Success - data extract call")
 	@Test
-	public void testSuccess() throws JsonProcessingException {
+	public void testSuccess() throws JsonProcessingException, CourtlistDataExtractException {
 
 		String response = successResponseObject();
 		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
@@ -107,7 +110,7 @@ class CourtlistDataExtractServiceTest {
 	
 	@DisplayName("Success - data extract call")
 	@Test
-	public void testHTMLSuccess() throws JsonProcessingException {
+	public void testHTMLSuccess() throws JsonProcessingException, CourtlistDataExtractException {
 
 		String response = successResponseObject();
 		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
@@ -123,48 +126,22 @@ class CourtlistDataExtractServiceTest {
 
 	@DisplayName("Missing param - data extract call")
 	@Test
-	public void testMissingParams() {
+	public void testMissingParams() throws CourtlistDataExtractException {
 
-		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.MISSING_PARAMS_ERROR
+		String response = "<Error><ErrorMessage>" + Keys.MISSING_PARAMS_ERROR
 				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
-		ResponseEntity<?> res = service.extractData(null, "02-JAN-2020");
-		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
-		Assertions.assertEquals(response, res.getBody());
+		Assertions.assertThrows(CourtlistDataExtractException.class, () -> service.extractData(null, "02-JAN-2020"));
 
 	}
 
 	@DisplayName("Invalid param - data extract call")
 	@Test
-	public void testInvalidParams() {
+	public void testInvalidParams() throws CourtlistDataExtractException {
 
-		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.INVALID_PARAMS_ERROR
+		String response = "<Error><ErrorMessage>" + Keys.INVALID_PARAMS_ERROR
 				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
-		ResponseEntity<?> res = service.extractData("Jan 01 2020", "02-JAN-2020");
-		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
-		Assertions.assertEquals(response, res.getBody());
 
-	}
-
-	@DisplayName("Run time Error - data extract call")
-	@Test
-	public void testRunTimeException() throws IOException {
-
-		mockBackEnd.shutdown();
-		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
-		setUp();
-		Assertions.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, res.getStatusCode());
-
-	}
-
-	@DisplayName("Authorization Error - data extract call")
-	@Test
-	public void testUnauthorizedException() throws IOException {
-
-		MockResponse mockResponse = new MockResponse();
-		mockResponse.setResponseCode(401);
-		mockBackEnd.enqueue(mockResponse);
-		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
-		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, res.getStatusCode());
+		Assertions.assertThrows(CourtlistDataExtractException.class, () -> service.extractData("Jan 01 2020", "02-JAN-2020"));
 
 	}
 	
