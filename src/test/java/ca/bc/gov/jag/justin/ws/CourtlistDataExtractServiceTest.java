@@ -72,7 +72,8 @@ class CourtlistDataExtractServiceTest {
 
 	@BeforeEach
 	void initialize() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		MockitoAnnotations.initMocks(this);
+
+		MockitoAnnotations.openMocks(this);
 		String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
 		Mockito.when(properties.getBaseUrl()).thenReturn(baseUrl);
 		Mockito.when(properties.getUsername()).thenReturn("username");
@@ -83,11 +84,13 @@ class CourtlistDataExtractServiceTest {
 		Method postConstruct = CourtlistDataExtractService.class.getDeclaredMethod("InitService");
 		postConstruct.setAccessible(true);
 		postConstruct.invoke(service);
+
 	}
 
 	@DisplayName("Success - data extract call")
 	@Test
 	public void testSuccess() throws JsonProcessingException {
+
 		String response = successResponseObject();
 		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
 		MockResponse mockResponse = new MockResponse();
@@ -99,11 +102,13 @@ class CourtlistDataExtractServiceTest {
 		Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
 		String serviceResponse = jaxbObjectToXML(res.getBody());
 		Assertions.assertEquals(response, serviceResponse);
+
 	}
 	
 	@DisplayName("Success - data extract call")
 	@Test
 	public void testHTMLSuccess() throws JsonProcessingException {
+
 		String response = successResponseObject();
 		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
 		MockResponse mockResponse = new MockResponse();
@@ -111,47 +116,56 @@ class CourtlistDataExtractServiceTest {
 		mockResponse.addHeader("content-type: application/xml;");
 		mockResponse.setResponseCode(200);
 		mockBackEnd.enqueue(mockResponse);
-		String res = service.extractData1("01-JAN-2020", "02-JAN-2020");
+		String res = service.getData("01-JAN-2020", "02-JAN-2020");
 		Assertions.assertNotEquals("", res);
+
 	}
 
 	@DisplayName("Missing param - data extract call")
 	@Test
 	public void testMissingParams() {
+
 		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.MISSING_PARAMS_ERROR
 				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
 		ResponseEntity<?> res = service.extractData(null, "02-JAN-2020");
 		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
 		Assertions.assertEquals(response, res.getBody());
+
 	}
 
 	@DisplayName("Invalid param - data extract call")
 	@Test
 	public void testInvalidParams() {
+
 		String response = "<Error><ErrorMessage>" + CourtlistDataExtractService.INVALID_PARAMS_ERROR
 				+ "</ErrorMessage><ErrorCode>-1</ErrorCode></Error>";
 		ResponseEntity<?> res = service.extractData("Jan 01 2020", "02-JAN-2020");
 		Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
 		Assertions.assertEquals(response, res.getBody());
+
 	}
 
 	@DisplayName("Run time Error - data extract call")
 	@Test
 	public void testRunTimeException() throws IOException {
+
 		mockBackEnd.shutdown();
 		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
 		setUp();
 		Assertions.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, res.getStatusCode());
+
 	}
 
 	@DisplayName("Authorization Error - data extract call")
 	@Test
 	public void testUnauthorizedException() throws IOException {
+
 		MockResponse mockResponse = new MockResponse();
 		mockResponse.setResponseCode(401);
 		mockBackEnd.enqueue(mockResponse);
 		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
 		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, res.getStatusCode());
+
 	}
 	
 	private String successResponseObject() {
@@ -166,8 +180,7 @@ class CourtlistDataExtractServiceTest {
 		jcd.setEndDate("02-JAN-2020");
 		jcd.setExtract(new Date().toString());
 		return jaxbObjectToXML(jcd);
-		
-		
+
 	}
 	
 	public static String jaxbObjectToXML(Object obj) {
