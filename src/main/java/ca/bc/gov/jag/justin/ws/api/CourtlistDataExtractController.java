@@ -53,7 +53,6 @@ public class CourtlistDataExtractController {
 	@GetMapping(value = "/getData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody
-	@RolesAllowed("uma_protection")
 	public String getData(@RequestParam(value="startDate",required = false) String startDate,
 						  @RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
