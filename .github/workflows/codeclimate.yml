@@ -2,9 +2,9 @@ name: Generate/Upload Spring Boot Coverage Report To Code Climate
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   spring-boot:
@@ -39,18 +39,18 @@ jobs:
           echo "GIT_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
         if: github.event_name == 'pull_request'
 
-      # Set required Git env vars for a push to master
+      # Set required Git env vars for a push to main
       - name: Set ENV for codeclimate (push)
         run: |
           echo "GIT_BRANCH=$GITHUB_REF" >> $GITHUB_ENV
           echo "GIT_COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
         if: github.event_name == 'push'
 
-      # Trimming the ref to master in order to publish correct report (paambaati)
-      - name: Set ref/head/master to master
+      # Trimming the ref to main in order to publish correct report (paambaati)
+      - name: Set ref/head/main to main
         run: |
-          echo "GIT_BRANCH=master" >> $GITHUB_ENV
-        if: env.GIT_BRANCH == 'refs/heads/master'
+          echo "GIT_BRANCH=main" >> $GITHUB_ENV
+        if: env.GIT_BRANCH == 'refs/heads/main'
 
       # Setup Java Environment
       - name: Set up JDK 1.8
