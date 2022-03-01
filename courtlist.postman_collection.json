@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "7c384afd-bdc2-484a-9949-4d54fe5d4449",
+		"name": "courtlist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Court List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/courtlist/retrieveData?startDate=07-JAN-2022&endDate=14-JAN-2022",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"courtlist",
+						"retrieveData"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "07-JAN-2022"
+						},
+						{
+							"key": "endDate",
+							"value": "14-JAN-2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Court List Html",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/courtlist/getData?startDate=07-JAN-2022&endDate=14-JAN-2022",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"courtlist",
+						"getData"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "07-JAN-2022"
+						},
+						{
+							"key": "endDate",
+							"value": "14-JAN-2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Court List ORDS",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ordsBaseUrl}}/ords/devj/justinords/web/courtlisttoxml?pApprStartDate=01-JAN-2022&pApprEndDate=14-JAN-2022",
+					"host": [
+						"{{ordsBaseUrl}}"
+					],
+					"path": [
+						"ords",
+						"devj",
+						"justinords",
+						"web",
+						"courtlisttoxml"
+					],
+					"query": [
+						{
+							"key": "pApprStartDate",
+							"value": "01-JAN-2022"
+						},
+						{
+							"key": "pApprEndDate",
+							"value": "14-JAN-2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ORDS Health",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ordsBaseUrl}}/ords/devj/justinords/web/health",
+					"host": [
+						"{{ordsBaseUrl}}"
+					],
+					"path": [
+						"ords",
+						"devj",
+						"justinords",
+						"web",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
