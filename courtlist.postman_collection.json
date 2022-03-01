@@ -45,14 +45,11 @@
 					]
 				},
 				"url": {
-					"raw": "{{keyCloakBaseUrl}}/auth/realms/isb-api/protocol/openid-connect/token",
+					"raw": "{{keyCloakUrl}}/protocol/openid-connect/token",
 					"host": [
-						"{{keyCloakBaseUrl}}"
+						"{{keyCloakUrl}}"
 					],
 					"path": [
-						"auth",
-						"realms",
-						"isb-api",
 						"protocol",
 						"openid-connect",
 						"token"
