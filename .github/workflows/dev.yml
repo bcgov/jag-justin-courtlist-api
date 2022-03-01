@@ -2,10 +2,10 @@ name: Build court-list-ws Image
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
     branches:
-      - master
+      - main
 
 jobs:
   app-version:
