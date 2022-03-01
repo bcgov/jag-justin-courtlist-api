@@ -1,17 +1,13 @@
 package ca.bc.gov.jag.justin.ws.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -26,15 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
 
@@ -82,12 +75,11 @@ public class CourtlistDataExtractService {
 
 	/**
 	 * Call Court list data extract web service
-	 * 
-	 * @param startDate
-	 * @param endDate
-	 * @return
+	 * @param startDate request start
+	 * @param endDate request end
+	 * @return Object Data
 	 */
-	public ResponseEntity<?> extractData(String startDate, String endDate) throws CourtlistDataExtractException {
+	public ResponseEntity<JustinCourtListDataType> extractData(String startDate, String endDate) throws CourtlistDataExtractException {
 
 		logger.info("Try extract data");
 
@@ -99,7 +91,7 @@ public class CourtlistDataExtractService {
 		Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
 				.bodyToMono(JustinCourtListDataType.class);
 
-		return new ResponseEntity<JustinCourtListDataType>(responseBody.block(), HttpStatus.OK);
+		return new ResponseEntity<>(responseBody.block(), HttpStatus.OK);
 
 	}
 
@@ -107,7 +99,7 @@ public class CourtlistDataExtractService {
 	 * Currently unsure of the purpose of this service
 	 * @param startDate request start
 	 * @param endDate request end
-	 * @return raw data
+	 * @return html data
 	 */
 	public String getData(String startDate, String endDate) throws CourtlistDataExtractException {
 
@@ -140,8 +132,6 @@ public class CourtlistDataExtractService {
 
 	private String transformToHtml(String response) {
 
-		String result = null;
-
 		try {
 
 			logger.info("Performing transformation.. ");
@@ -151,38 +141,22 @@ public class CourtlistDataExtractService {
 			// Get the XSLT file
 			InputStream xsl = new ClassPathResource("courtlist.xslt").getInputStream();
 
-			TransformerFactory transfomerFactory = TransformerFactory.newInstance();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			// Obtain the XSLT transformer
 
 			StreamSource style = new StreamSource(xsl);
-			Transformer transformer = transfomerFactory.newTransformer(style);
+			Transformer transformer = transformerFactory.newTransformer(style);
 
 			DOMSource source = new DOMSource(doc);
 			StringWriter writer = new StringWriter();
 			StreamResult streamResult = new StreamResult(writer);
 			transformer.transform(source, streamResult);
-			result = writer.toString();
+			return writer.toString();
 
-		}
-
-		catch (ParserConfigurationException e) {
-			logger.error("Error occurred while parsing", e);
-			result = String.format("Error occurred while parsing %s", e.getMessage()) ;
-		} catch (TransformerException e) {
-			logger.error("Error TransformerException occurred", e);
-			result = String.format("Error TransformerException occurred %s", e.getMessage());
-		} catch (IOException e) {
-			logger.error("Error IO Exception occurred", e);
-			result = String.format("Error IO Exception occurred %s", e.getMessage());
-		} catch (SAXException e) {
-			logger.error("Error : SAXException occurred", e);
-			result = String.format("Error : SAXException occurred %s", e.getMessage());
 		} catch (Exception e) {
-			logger.error("Error occured in transformToHtml", e);
-			result = String.format("Error occurred in transformToHtml %s", e.getMessage());
+			logger.error("Error occurred in transformToHtml", e);
+			return String.format("Error occurred in transformToHtml %s", e.getMessage());
 		}
-
-		return result;
 
 	}
 }
