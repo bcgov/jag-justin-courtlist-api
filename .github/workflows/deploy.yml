@@ -20,7 +20,7 @@ jobs:
   promote_image:
     uses: SierraSystems/reusable-workflows/.github/workflows/openshift-tag-image.yml@main
     with:
-      image_stream_name: "justin-court-list-api"
+      image_stream_name: "court-list-ws"
       source_image_tag: "${{ github.event.inputs.source_image_tag }}"
       image_tags: "${{ github.event.inputs.environment }}"
     secrets:

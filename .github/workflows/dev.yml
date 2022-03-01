@@ -1,4 +1,4 @@
-name: Build jrcc-loader Image
+name: Build court-list-ws Image
 on:
   push:
     branches:
@@ -10,6 +10,8 @@ on:
 jobs:
   app-version:
     uses: SierraSystems/reusable-workflows/.github/workflows/java-maven-app-version.yml@main
+    with:
+      working_directory: .
 
   build-image:
     uses: SierraSystems/reusable-workflows/.github/workflows/openshift-source-to-image.yml@main
