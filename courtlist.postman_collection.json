@@ -6,8 +6,71 @@
 	},
 	"item": [
 		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get jwt\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"jwt\", jsonData.access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "default"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{clientSecret}}",
+							"type": "default"
+						},
+						{
+							"key": "client_id",
+							"value": "justin-courtlist-api",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keyCloakUrl}}/protocol/openid-connect/token",
+					"host": [
+						"{{keyCloakUrl}}"
+					],
+					"path": [
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Court List",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -36,6 +99,16 @@
 		{
 			"name": "Get Court List Html",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -56,64 +129,6 @@
 							"key": "endDate",
 							"value": "14-JAN-2022"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Court List ORDS",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{ordsBaseUrl}}/ords/devj/justinords/web/courtlisttoxml?pApprStartDate=01-JAN-2022&pApprEndDate=14-JAN-2022",
-					"host": [
-						"{{ordsBaseUrl}}"
-					],
-					"path": [
-						"ords",
-						"devj",
-						"justinords",
-						"web",
-						"courtlisttoxml"
-					],
-					"query": [
-						{
-							"key": "pApprStartDate",
-							"value": "01-JAN-2022"
-						},
-						{
-							"key": "pApprEndDate",
-							"value": "14-JAN-2022"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ORDS Health",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{ordsBaseUrl}}/ords/devj/justinords/web/health",
-					"host": [
-						"{{ordsBaseUrl}}"
-					],
-					"path": [
-						"ords",
-						"devj",
-						"justinords",
-						"web",
-						"health"
 					]
 				}
 			},

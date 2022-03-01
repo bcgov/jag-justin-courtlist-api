@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class CourtListControllerAdvisorTest {
@@ -84,6 +85,17 @@ public class CourtListControllerAdvisorTest {
 
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
         Assertions.assertEquals("<Error><ErrorMessage>Unknown error occured</ErrorMessage><ErrorCode>-1</ErrorCode></Error>", result.getBody());
+
+    }
+
+    @Test
+    @DisplayName("401: Assert unauthorized returned")
+    public void testUnAuthException() {
+
+        ResponseEntity<Object> result = sut.handleUnAuthorizedException(new AccessDeniedException("Something went wrong"));
+
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
+        Assertions.assertEquals("<Error><ErrorMessage>Something went wrong</ErrorMessage><ErrorCode>-1</ErrorCode></Error>", result.getBody());
 
     }
 

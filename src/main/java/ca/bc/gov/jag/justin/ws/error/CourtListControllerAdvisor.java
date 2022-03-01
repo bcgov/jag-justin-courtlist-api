@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.security.access.AccessDeniedException;
 
 @ControllerAdvice
 public class CourtListControllerAdvisor {
@@ -56,6 +57,15 @@ public class CourtListControllerAdvisor {
         logger.error("Exception ", ex);
 
         return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, Keys.UNKOWN_ERROR, Keys.ERROR_RESPONSE_CODE), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleUnAuthorizedException(AccessDeniedException ex) {
+
+        logger.error("Access Denied ", ex);
+
+        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getMessage(), Keys.ERROR_RESPONSE_CODE), HttpStatus.UNAUTHORIZED);
 
     }
 
