@@ -1,0 +1,20 @@
+server:
+  port: ${PORT:8083}
+  servlet:
+    context-path: "/courtlist"
+
+#Justin courtlist data properties
+courtlist:
+  base-url: ${COURTLIST_BASEURL}
+  username: ${COURTLIST_USERNAME}
+  password: ${COURTLIST_PASSWORD}
+  data-extract-uri: "/courtlisttoxml?pApprStartDate=%s&pApprEndDate=%s"
+  data-buffer-size: 16
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL}
+  realm: ${KEYCLOAK_REALM}
+  resource: ${KEYCLOAK_RESOURCE:justin-courtlist-api}
+  use-resource-role-mappings: true
+  bearer-only: true
+  ssl-required: ${KEYCLOAK_SSL_REQUIRED:external}
