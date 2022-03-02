@@ -8,7 +8,7 @@ WORKDIR /
 COPY . .
 
 RUN mvn -B clean package \
-        -Dmaven.test.skip=false \
+        -Dmaven.test.skip=false 
 
 #############################################################################################
 ### Stage where Docker is running a java process to run a service built in previous stage ###
