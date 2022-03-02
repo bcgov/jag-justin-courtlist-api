@@ -27,7 +27,7 @@ mvn -f versions:set -DartifactId=*  -DgroupId=*
 
 ## Configuration
 
-You should use environment variables to configure the jag efiling api
+You should use environment variables to configure the jag court list api
 
 | Environment Variable            | Type    | Description                                  | Notes                          |
 | ------------------------------- | ------- | -------------------------------------------- | ------------------------------ |
