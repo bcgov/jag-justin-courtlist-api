@@ -3,14 +3,12 @@
 #############################################################################################
 FROM maven:3.6.3-jdk-8 as build
 
-ARG SKIP_TESTS=false
-
 WORKDIR /
 
 COPY . .
 
 RUN mvn -B clean package \
-        -Dmaven.test.skip=${SKIP_TESTS} \
+        -Dmaven.test.skip=false \
 
 #############################################################################################
 ### Stage where Docker is running a java process to run a service built in previous stage ###
