@@ -153,6 +153,8 @@ public class CourtlistDataExtractService {
 			StringWriter writer = new StringWriter();
 			StreamResult streamResult = new StreamResult(writer);
 			transformer.transform(source, streamResult);
+
+			logger.info("transformation complete");
 			return writer.toString();
 
 		} catch (Exception e) {
