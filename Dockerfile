@@ -17,7 +17,7 @@ FROM openjdk:8-jdk-slim
 
 ARG SERVICE_NAME=justin-court-list-api
 
-COPY --from=build ./${SERVICE_NAME}/target/${SERVICE_NAME}-*.jar /app/service.jar
+COPY --from=build ./target/${SERVICE_NAME}-*.jar /app/service.jar
 
 CMD ["java", "-jar", "/app/service.jar"]
 #############################################################################################
