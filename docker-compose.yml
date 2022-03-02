@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+
+  #############################################################################################
+  ###                           Document Distribution Webservice                            ###
+  #############################################################################################
+  justin-court-list-api:
+    container_name: justin-court-list-api
+    hostname: justin-court-list-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SKIP_TESTS=true
+    ports:
+      - "8083:8080"
+    environment:
+      - COURTLIST_BASEURL=${COURTLIST_BASEURL}
+      - COURTLIST_USERNAME=${COURTLIST_USERNAME}
+      - COURTLIST_PASSWORD=${COURTLIST_PASSWORD}
+      - KEYCLOAK_AUTH_SERVER_URL=${KEYCLOAK_AUTH_SERVER_URL}
+      - KEYCLOAK_REALM=${KEYCLOAK_REALM}
+      - KEYCLOAK_RESOURCE=${KEYCLOAK_RESOURCE}
+      - KEYCLOAK_SSL_REQUIRED=${KEYCLOAK_SSL_REQUIRED}  
