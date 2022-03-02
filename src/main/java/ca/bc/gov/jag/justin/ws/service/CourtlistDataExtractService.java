@@ -91,6 +91,8 @@ public class CourtlistDataExtractService {
 		Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
 				.bodyToMono(JustinCourtListDataType.class);
 
+		logger.info("Data extracted");
+
 		return new ResponseEntity<>(responseBody.block(), HttpStatus.OK);
 
 	}
