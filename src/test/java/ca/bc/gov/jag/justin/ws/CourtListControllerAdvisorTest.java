@@ -54,7 +54,7 @@ public class CourtListControllerAdvisorTest {
     }
 
     @Test
-    @DisplayName("400: Assert bad request returned")
+    @DisplayName("500: Assert internal server error returned")
     public void testWebClientException() {
 
         Mockito.when(clientResponseException.getStatusText()).thenReturn("HELP");
@@ -62,7 +62,7 @@ public class CourtListControllerAdvisorTest {
         ResponseEntity<Object> result = sut.handleWebClientException(clientResponseException);
 
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
-        Assertions.assertEquals("<Error><ErrorMessage>HELP</ErrorMessage><ErrorCode>-1</ErrorCode></Error>", result.getBody());
+        Assertions.assertEquals("<Error><ErrorMessage>Exception calling ords service: HELP</ErrorMessage><ErrorCode>-1</ErrorCode></Error>", result.getBody());
 
     }
 
