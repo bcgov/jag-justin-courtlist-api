@@ -36,9 +36,9 @@ public class CourtListControllerAdvisor {
     @ExceptionHandler(WebClientResponseException.class)
     public ResponseEntity<Object> handleWebClientException(WebClientResponseException ex) {
 
-        logger.error("DataBuffer Error", ex);
+        logger.error("Ords Client Exception", ex);
 
-        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getStatusText(), Keys.ERROR_RESPONSE_CODE), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, String.format("Exception calling ords service: %s", ex.getStatusText()), Keys.ERROR_RESPONSE_CODE), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
