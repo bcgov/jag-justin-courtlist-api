@@ -22,7 +22,7 @@ mvn clean verify
 ### Update Version
 
 ```
-mvn -f versions:set -DartifactId=*  -DgroupId=*
+mvn versions:set -DartifactId=*  -DgroupId=*
 ```
 
 ## Configuration
