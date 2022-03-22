@@ -41,6 +41,7 @@ public class CourtlistDataExtractController {
 	@GetMapping(value = "/retrieveData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE})
 	@ResponseBody
+	@RolesAllowed("data-view")
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
@@ -53,6 +54,7 @@ public class CourtlistDataExtractController {
 	@GetMapping(value = "/getData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody
+	@RolesAllowed("data-view")
 	public String getData(@RequestParam(value="startDate",required = false) String startDate,
 						  @RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
