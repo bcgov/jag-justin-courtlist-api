@@ -73,9 +73,10 @@ class CourtlistDataExtractControllerTest {
 		Mockito.when(authenticationMock.getPrincipal()).thenReturn(keycloakPrincipalMock);
 		Mockito.when(keycloakPrincipalMock.getKeycloakSecurityContext()).thenReturn(keycloakSecurityContextMock);
 		Mockito.when(keycloakSecurityContextMock.getToken()).thenReturn(tokenMock);
+		Mockito.when(tokenMock.getIssuedFor()).thenReturn("TEST");
 
 		SecurityContextHolder.setContext(securityContextMock);
-		
+
 	}
 	@DisplayName("Success - CourtlistDataExtractController")
 	@Test
