@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: "/courtlist"
 
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
 #Justin courtlist data properties
 courtlist:
   base-url: ${COURTLIST_BASEURL}
