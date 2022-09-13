@@ -64,6 +64,7 @@ public class CourtlistDataExtractService {
 		// Authenticate using basic authentication
 		// Configure max in memory size to handle massive amount of data retrieved
 		this.webClient = WebClient.builder().baseUrl(properties.getBaseUrl())
+				.defaultHeaders(header -> header.setBasicAuth(properties.getUsername(), properties.getPassword()))
 				.exchangeStrategies(
 						ExchangeStrategies.builder()
 								.codecs(configurer -> configurer.defaultCodecs()
