@@ -15,7 +15,7 @@ courtlist:
   username: ${COURTLIST_USERNAME}
   password: ${COURTLIST_PASSWORD}
   data-extract-uri: "/courtlisttoxml?pApprStartDate=%s&pApprEndDate=%s"
-  data-buffer-size: 16
+  data-buffer-size: ${COURTLIST_DATA_BUFFER:160}
 
 keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL}
