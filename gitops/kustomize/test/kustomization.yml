@@ -1,0 +1,20 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - ../base
+
+patchesStrategicMerge:
+  - route.yml
+
+images:
+  - name: court-list-ws
+    newTag: "test"
+
+configMapGenerator:
+  - name: court-list-ws-config
+    behavior: merge
+    literals:
+      - COURTLIST_BASEURL='https://wsgw.test.jag.gov.bc.ca/ords/devj/justinords/web/'
+      - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-test.apps.silver.devops.gov.bc.ca/auth'
+
