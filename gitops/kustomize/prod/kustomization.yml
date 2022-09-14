@@ -11,12 +11,12 @@ namespace: wuboml-prod
 
 images:
   - name: court-list-ws
-    newTag: "test"
+    newTag: "prod"
 
 configMapGenerator:
   - name: court-list-ws-config
     behavior: merge
     literals:
-      - COURTLIST_BASEURL='https://wsgw.test.jag.gov.bc.ca/ords/devj/justinords/web/'
-      - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-test.apps.silver.devops.gov.bc.ca/auth'
+      - COURTLIST_BASEURL='https://wsgw.jag.gov.bc.ca/ords/devj/justinords/web/'
+      - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-prod.apps.silver.devops.gov.bc.ca/auth'
 
