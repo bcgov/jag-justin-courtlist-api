@@ -5,18 +5,19 @@ resources:
   - ../base
 
 patchesStrategicMerge:
-  - route.yml
+  - deployment.yml
+#  - route.yml
 
 namespace: wuboml-prod
 
 images:
-  - name: court-list-ws
+  - name: image-registry.openshift-image-registry.svc:5000/wuboml-tools/court-list-ws
     newTag: "test"
 
 configMapGenerator:
   - name: court-list-ws-config
     behavior: merge
     literals:
-      - COURTLIST_BASEURL='https://wsgw.test.jag.gov.bc.ca/ords/devj/justinords/web/'
+      - COURTLIST_BASEURL='https://test.jag.gov.bc.ca/ords/tstj/justinords/web/'
       - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-test.apps.silver.devops.gov.bc.ca/auth'
 
