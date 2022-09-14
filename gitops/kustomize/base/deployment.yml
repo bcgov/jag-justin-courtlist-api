@@ -24,8 +24,6 @@ spec:
             - name: app
               containerPort: 8083
           envFrom:
-            - configMapRef:
-                name: court-list-ws-config
             - secretRef:
                 name: court-list-ws-secret
 # TODO - setup the liveness and readiness probes

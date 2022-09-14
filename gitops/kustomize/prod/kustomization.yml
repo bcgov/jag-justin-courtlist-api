@@ -6,18 +6,9 @@ resources:
 
 patchesStrategicMerge:
   - deployment.yml
-#  - route.yml
 
 namespace: wuboml-prod
 
 images:
   - name: image-registry.openshift-image-registry.svc:5000/wuboml-tools/court-list-ws
     newTag: "prod"
-
-configMapGenerator:
-  - name: court-list-ws-config
-    behavior: merge
-    literals:
-      - COURTLIST_BASEURL='https://jag.gov.bc.ca/ords/prdj/justinords/web/'
-      - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-prod.apps.silver.devops.gov.bc.ca/auth'
-

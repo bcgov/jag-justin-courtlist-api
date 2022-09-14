@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
-  - route.yml
 
 generatorOptions:
   labels:
@@ -13,13 +12,3 @@ generatorOptions:
 images:
   - name: "image-registry.openshift-image-registry.svc:5000/wuboml-tools/court-list-ws"
     newTag: "latest"
-
-configMapGenerator:
-  - name: court-list-ws-config
-    behavior: create
-    literals:
-      - COURTLIST_BASEURL='https://dev.jag.gov.bc.ca/ords/devj/justinords/web/'
-      - KEYCLOAK_AUTH_SERVER_URL='https://keycloak-060d15-dev.apps.silver.devops.gov.bc.ca/auth'
-      - KEYCLOAK_REALM='isb-api'
-      - KEYCLOAK_RESOURCE='justin-courtlist-api'
-      - KEYCLOAK_SSL_REQUIRED='external'
