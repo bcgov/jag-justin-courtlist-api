@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: court-list-ws
+  labels:
+    app: court-list-ws
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: app
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  selector:
+    app: court-list-ws
