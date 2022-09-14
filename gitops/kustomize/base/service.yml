@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: court-list-ws
   labels:
-    application: court-list-ws
+    app: court-list-ws
 spec:
   ports:
     - protocol: TCP
