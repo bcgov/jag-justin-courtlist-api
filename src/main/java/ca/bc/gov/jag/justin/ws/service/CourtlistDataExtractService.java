@@ -79,7 +79,7 @@ public class CourtlistDataExtractService {
 	 * @param endDate request end
 	 * @return Object Data
 	 */
-	public ResponseEntity<JustinCourtListDataType> extractData(String startDate, String endDate) throws CourtlistDataExtractException {
+	public ResponseEntity<String> extractData(String startDate, String endDate) throws CourtlistDataExtractException {
 
 		logger.info("Try extract data");
 
@@ -88,8 +88,8 @@ public class CourtlistDataExtractService {
 		// Build request url with the input parameters
 		String dataExtractUri = String.format(properties.getDataExtractUri(), startDate, endDate);
 
-		Mono<JustinCourtListDataType> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
-				.bodyToMono(JustinCourtListDataType.class);
+		Mono<String> responseBody = this.webClient.get().uri(dataExtractUri).retrieve()
+				.bodyToMono(String.class);
 
 		logger.info("Data extracted");
 
