@@ -103,8 +103,7 @@ class CourtlistDataExtractServiceTest {
 		mockBackEnd.enqueue(mockResponse);
 		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
 		Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
-		String serviceResponse = jaxbObjectToXML(res.getBody());
-		Assertions.assertEquals(response, serviceResponse);
+		Assertions.assertEquals(response, res.getBody());
 
 	}
 	
