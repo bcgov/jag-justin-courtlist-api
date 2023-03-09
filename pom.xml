@@ -11,12 +11,13 @@
 	</parent>
 	<groupId>ca.bc.gov</groupId>
 	<artifactId>justin-court-list-api</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>justin-court-list-api</name>
 	<description>Justin Court List API Spring Boot Application</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<log4j2.version>2.17.1</log4j2.version>
+
 	</properties>
 
 	<dependencies>
