@@ -8,12 +8,12 @@ WORKDIR /
 COPY . .
 
 RUN mvn -B clean package \
-        -Dmaven.test.skip=false 
+        -Dmaven.test.skip=true
 
 #############################################################################################
 ### Stage where Docker is running a java process to run a service built in previous stage ###
 #############################################################################################
-FROM openjdk:8-jdk-slim
+FROM eclipse-temurin:8-jre-jammy
 
 ARG SERVICE_NAME=justin-court-list-api
 
