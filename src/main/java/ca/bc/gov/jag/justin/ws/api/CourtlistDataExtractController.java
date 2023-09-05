@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class CourtlistDataExtractController {
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
-		//logger.info("Request for extract from: {}", ((KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getKeycloakSecurityContext().getToken().getIssuedFor());
+		logger.info("Request for extract from: {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
 		return service.extractData(startDate, endDate);
 
@@ -58,7 +59,7 @@ public class CourtlistDataExtractController {
 	public String getData(@RequestParam(value="startDate",required = false) String startDate,
 						  @RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
-		//logger.info("Request for getData from: {}", ((KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getKeycloakSecurityContext().getToken().getIssuedFor());
+		logger.info("Request for extract from: {}", SecurityContextHolder.getContext().getAuthentication().getName());
 
 		return service.getData(startDate, endDate);
 
