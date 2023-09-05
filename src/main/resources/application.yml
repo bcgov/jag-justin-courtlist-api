@@ -13,7 +13,13 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
-#Justin courtlist data properties
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak-060d15-dev.apps.silver.devops.gov.bc.ca/auth/realms/isb-api
+          jwk-set-uri: https://keycloak-060d15-dev.apps.silver.devops.gov.bc.ca/auth/realms/isb-api/protocol/openid-connect/certs
 courtlist:
   base-url: ${COURTLIST_BASEURL}
   username: ${COURTLIST_USERNAME}
@@ -21,10 +27,3 @@ courtlist:
   data-extract-uri: "/courtlisttoxml?pApprStartDate=%s&pApprEndDate=%s"
   data-buffer-size: ${COURTLIST_DATA_BUFFER:160}
 
-keycloak:
-  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL}
-  realm: ${KEYCLOAK_REALM}
-  resource: ${KEYCLOAK_RESOURCE:justin-courtlist-api}
-  use-resource-role-mappings: true
-  bearer-only: true
-  ssl-required: ${KEYCLOAK_SSL_REQUIRED:external}

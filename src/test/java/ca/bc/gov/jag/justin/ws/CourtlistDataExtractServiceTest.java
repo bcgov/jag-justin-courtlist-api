@@ -6,10 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
 import ca.bc.gov.jag.justin.ws.config.CourtlistDataExtractProperties;
@@ -162,12 +162,12 @@ class CourtlistDataExtractServiceTest {
 	
 	private String successResponseObject() {
 		JustinCourtListDataType jcd = new JustinCourtListDataType();
-		
-		PlmsCourtListType plms = new PlmsCourtListType();
-		
+
+		PLMSCourtListType plms = new PLMSCourtListType();
+
 		plms.setType("Provincial");
-		
-		jcd.setPlmsCourtList(plms);
+
+		jcd.setPLMSCourtList(plms);
 		jcd.setStartDate("01-JAN-2020");
 		jcd.setEndDate("02-JAN-2020");
 		jcd.setExtract(new Date().toString());
