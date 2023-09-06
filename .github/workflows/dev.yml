@@ -20,6 +20,7 @@ jobs:
     with:
       build_config_name: "court-list-ws"
       image_tags: "dev,${{ needs.app-version.outputs.app-version }},v${{ needs.app-version.outputs.app-version }}"
+      java_version: 17
     secrets:
       openshift_namespace: "${{ secrets.OPENSHIFT_LICENSE_PLATE_SILVER }}-tools"
       openshift_server_url: "${{ secrets.OPENSHIFT_SERVER_URL_SILVER }}"
