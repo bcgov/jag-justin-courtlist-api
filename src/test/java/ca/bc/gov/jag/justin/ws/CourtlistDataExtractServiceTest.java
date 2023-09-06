@@ -94,16 +94,16 @@ class CourtlistDataExtractServiceTest {
 	@Test
 	public void testSuccess() throws JsonProcessingException, CourtlistDataExtractException {
 
-//		String response = successResponseObject();
-//		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
-//		MockResponse mockResponse = new MockResponse();
-//		mockResponse.setBody(response);
-//		mockResponse.addHeader("content-type: application/xml;");
-//		mockResponse.setResponseCode(200);
-//		mockBackEnd.enqueue(mockResponse);
-//		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
-//		Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
-//		Assertions.assertEquals(response, res.getBody());
+		String response = successResponseObject();
+		Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(response);
+		MockResponse mockResponse = new MockResponse();
+		mockResponse.setBody(response);
+		mockResponse.addHeader("content-type: application/xml;");
+		mockResponse.setResponseCode(200);
+		mockBackEnd.enqueue(mockResponse);
+		ResponseEntity<?> res = service.extractData("01-JAN-2020", "02-JAN-2020");
+		Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
+		Assertions.assertEquals(response, res.getBody());
 
 	}
 	
