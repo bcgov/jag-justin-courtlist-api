@@ -18,8 +18,10 @@ import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import static org.mockito.ArgumentMatchers.any;
+
 
 /**
 *
@@ -45,6 +47,9 @@ class CourtlistDataExtractControllerTest {
 	@Mock
 	private Authentication authenticationMock;
 
+	@Mock
+	private Jwt keycloakPrincipalMock;
+
 	@InjectMocks
 	CourtlistDataExtractController controller = new CourtlistDataExtractController();
 	
@@ -57,6 +62,7 @@ class CourtlistDataExtractControllerTest {
 		MockitoAnnotations.openMocks(this);
 
 		Mockito.when(securityContextMock.getAuthentication()).thenReturn(authenticationMock);
+		Mockito.when(authenticationMock.getPrincipal()).thenReturn(keycloakPrincipalMock);
 
 		SecurityContextHolder.setContext(securityContextMock);
 

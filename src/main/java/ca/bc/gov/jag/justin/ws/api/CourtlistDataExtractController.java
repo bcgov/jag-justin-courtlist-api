@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class CourtlistDataExtractController {
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
-		logger.info("Request for extract from: {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		logger.info("Request for extract from: {}", ((Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("clientId"));
 
 		return service.extractData(startDate, endDate);
 
