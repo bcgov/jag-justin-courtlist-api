@@ -12,8 +12,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-
-#Justin courtlist data properties
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:https://unittest-uri}
+          jwk-set-uri: ${JWK_SET_URI:https://unittest-uri}
 courtlist:
   base-url: ${COURTLIST_BASEURL}
   username: ${COURTLIST_USERNAME}
@@ -21,10 +25,8 @@ courtlist:
   data-extract-uri: "/courtlisttoxml?pApprStartDate=%s&pApprEndDate=%s"
   data-buffer-size: ${COURTLIST_DATA_BUFFER:160}
 
-keycloak:
-  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL}
-  realm: ${KEYCLOAK_REALM}
-  resource: ${KEYCLOAK_RESOURCE:justin-courtlist-api}
-  use-resource-role-mappings: true
-  bearer-only: true
-  ssl-required: ${KEYCLOAK_SSL_REQUIRED:external}
+jwt:
+  auth:
+    converter:
+      resource-id: ${RESOURCE_ID:justin-courtlist-api}
+      principle-attribute: ${PRINCIPLE_ATTRIBUTE:preferred_username}

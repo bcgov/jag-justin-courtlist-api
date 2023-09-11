@@ -35,8 +35,7 @@ You should use environment variables to configure the jag court list api
 | COURTLIST_BASEURL               | String  | ORDS service base url                        | not defaulted                  |
 | COURTLIST_USERNAME              | String  | ORDS Username                                | not defaulted                  |
 | COURTLIST_PASSWORD              | String  | ORDS Password                                | not defaulted                  |
-| KEYCLOAK_AUTH_SERVER_URL        | String  | Keycloak Auth Url                            | not defaulted                  |
-| KEYCLOAK_REALM                  | String  | Keycloak Realm                               | not defaulted                  |
-| KEYCLOAK_RESOURCE               | String  | Keycloak Resource                            | defaulted to `justin-courtlist-api` |
-| KEYCLOAK_SSL_REQUIRED           | String  | Using ssl                                    | defaulted to `external`        |
+| ISSUER_URI                      | String  | Keycloak Auth Url                            | not defaulted                  |  not defaulted                  |
+| RESOURCE_ID                     | String  | Keycloak Resource                            | defaulted to `justin-courtlist-api` |
+| PRINCIPLE_ATTRIBUTE             | String  | Using name                                   | defaulted to `preferred_username`        |
 

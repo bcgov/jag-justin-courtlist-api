@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,8 +18,10 @@ import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import static org.mockito.ArgumentMatchers.any;
+
 
 /**
 *
@@ -49,14 +48,7 @@ class CourtlistDataExtractControllerTest {
 	private Authentication authenticationMock;
 
 	@Mock
-	private KeycloakPrincipal keycloakPrincipalMock;
-
-	@Mock
-	private KeycloakSecurityContext keycloakSecurityContextMock;
-
-	@Mock
-	private AccessToken tokenMock;
-
+	private Jwt keycloakPrincipalMock;
 
 	@InjectMocks
 	CourtlistDataExtractController controller = new CourtlistDataExtractController();
@@ -71,9 +63,6 @@ class CourtlistDataExtractControllerTest {
 
 		Mockito.when(securityContextMock.getAuthentication()).thenReturn(authenticationMock);
 		Mockito.when(authenticationMock.getPrincipal()).thenReturn(keycloakPrincipalMock);
-		Mockito.when(keycloakPrincipalMock.getKeycloakSecurityContext()).thenReturn(keycloakSecurityContextMock);
-		Mockito.when(keycloakSecurityContextMock.getToken()).thenReturn(tokenMock);
-		Mockito.when(tokenMock.getIssuedFor()).thenReturn("TEST");
 
 		SecurityContextHolder.setContext(securityContextMock);
 
