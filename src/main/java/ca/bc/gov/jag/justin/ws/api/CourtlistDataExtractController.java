@@ -35,7 +35,7 @@ public class CourtlistDataExtractController {
 
 	/**
 	 * Court list data extract end point controller
-	 * 
+	 *
 	 * @param startDate
 	 * @param endDate
 	 * @return
@@ -43,7 +43,7 @@ public class CourtlistDataExtractController {
 	@GetMapping(value = "/retrieveData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE})
 	@ResponseBody
-	@PreAuthorize("hasRole('data-view1')")
+	@PreAuthorize("hasRole('data-view')")
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
@@ -52,11 +52,11 @@ public class CourtlistDataExtractController {
 		return service.extractData(startDate, endDate);
 
 	}
-	
+
 	@GetMapping(value = "/getData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody
-	@PreAuthorize("hasRole('data-view1')")
+	@PreAuthorize("hasRole('data-view')")
 	public String getData(@RequestParam(value="startDate",required = false) String startDate,
 						  @RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
