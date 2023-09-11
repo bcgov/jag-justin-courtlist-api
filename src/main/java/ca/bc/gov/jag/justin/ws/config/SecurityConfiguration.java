@@ -18,20 +18,23 @@ class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors();
 
-        http.csrf().disable();
+        http.csrf(
+                httpSecurityCsrfConfigurer -> {
+                    httpSecurityCsrfConfigurer.disable();
+                });
 
-        http.authorizeHttpRequests()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2ResourceServer().jwt();
+        http.authorizeHttpRequests( authorizeRequests -> {
+            authorizeRequests.anyRequest().authenticated();
+            });
 
-        http.oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(jwtAuthConverter);
+        http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement(
+                httpSecuritySessionManagementConfigurer -> {
+                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
+                            SessionCreationPolicy.STATELESS);
+                });
 
         return http.build();
     }
