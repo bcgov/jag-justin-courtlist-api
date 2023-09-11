@@ -4,7 +4,9 @@ import ca.bc.gov.jag.justin.ws.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBufferLimitException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,7 +67,7 @@ public class CourtListControllerAdvisor {
 
         logger.error("Access Denied ", ex);
 
-        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getMessage(), Keys.ERROR_RESPONSE_CODE), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getMessage(), Keys.ERROR_RESPONSE_CODE), HttpStatus.FORBIDDEN);
 
     }
 
