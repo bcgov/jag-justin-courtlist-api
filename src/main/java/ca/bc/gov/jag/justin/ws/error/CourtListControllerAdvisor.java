@@ -65,7 +65,7 @@ public class CourtListControllerAdvisor {
 
         logger.error("Access Denied ", ex);
 
-        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getMessage(), Keys.ERROR_RESPONSE_CODE), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(String.format(Keys.ERROR_RESPONSE_XML, ex.getMessage(), Keys.ERROR_RESPONSE_CODE), HttpStatus.FORBIDDEN);
 
     }
 

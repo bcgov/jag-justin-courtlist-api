@@ -35,7 +35,7 @@ public class CourtlistDataExtractController {
 
 	/**
 	 * Court list data extract end point controller
-	 * 
+	 *
 	 * @param startDate
 	 * @param endDate
 	 * @return
@@ -52,7 +52,7 @@ public class CourtlistDataExtractController {
 		return service.extractData(startDate, endDate);
 
 	}
-	
+
 	@GetMapping(value = "/getData", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE,MediaType.TEXT_HTML_VALUE})
 	@ResponseBody

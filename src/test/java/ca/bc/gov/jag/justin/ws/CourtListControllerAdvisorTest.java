@@ -94,7 +94,7 @@ public class CourtListControllerAdvisorTest {
 
         ResponseEntity<Object> result = sut.handleUnAuthorizedException(new AccessDeniedException("Something went wrong"));
 
-        Assertions.assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
         Assertions.assertEquals("<Error><ErrorMessage>Something went wrong</ErrorMessage><ErrorCode>-1</ErrorCode></Error>", result.getBody());
 
     }
