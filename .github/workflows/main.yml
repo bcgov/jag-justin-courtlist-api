@@ -1,0 +1,102 @@
+# This is the main workflow that creates a new image and push to Openshift image stream which in turn triggers the deployment
+
+name: Main - Build Image and Push to Openshift Registry for Dev Deployment
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      app1:
+        description: 'App Name (justin-courtlist-api)'
+        required: true
+        default: 'justin-courtlist-api'
+      env:
+        type: choice
+        description: Image Target environment
+        options: 
+        - dev
+        required: true
+        default: 'dev'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build and push"
+  build-and-push-image:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      
+      # Get the version number which is prefixed with the Github release branches in format release/{version}
+      - name: Get Release Version
+        run: |
+          branch=${GITHUB_REF##*/}
+          version=$(echo $branch | cut -d "/" -f2-)
+          echo "releaseVersion=$version" >> $GITHUB_ENV
+      
+      # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
+      - name: Get git commit short sha
+        id: sha
+        run: |
+          shortSha=$(echo $(git rev-parse --short HEAD) | cut -c1-7)
+          echo "gitsha=$shortSha" >> $GITHUB_ENV
+      
+      # Prints vital release paramters used
+      - name: Print Release Variables
+        run: |
+          echo "Release Application: ${{ github.event.inputs.app1 }}"
+          echo "Release Environment: ${{ github.event.inputs.env }}"
+          echo "Release Version: ${{ env.releaseVersion }}"
+          echo "Release Git Sha: ${{env.gitsha}}"
+
+      #Build image jag-justin-courtlist-api
+      - name: Build image justin-courtlist-api
+        run: |
+          docker-compose build ${{github.event.inputs.app1}}
+      
+      #Login to OpenShift Container Repository - Silver
+      - name: Login to OpenShift Container Repository - Silver
+        uses: docker/login-action@v2
+        with:
+          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}
+          username: ${{secrets.OPENSHIFT_SA_PIPELINE_USERNAME_SILVER}}
+          password: ${{secrets.OPENSHIFT_SA_PIPELINE_TOKEN_SILVER}}
+  
+      #Push image jrcc-receiver to OpenShift Image stream - Silver
+      - name: Push Image justin-courtlist-api to Openshift Image Stream - Silver
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{github.event.inputs.app1}}:${{ github.event.inputs.env }}
+        run: |
+          docker tag ${{github.event.inputs.app1}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Silver
+      # - name: Authenticate OC Env Specific SA - Silver
+      #   uses: redhat-actions/oc-login@v1
+      #   env:
+      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+      #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_NAME}}
+      #   with:
+      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL_SILVER}}
+      #     openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
+      #     namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+     
+      # # start a rollout with latest image
+      # - name: Starting rollout to release new version of justin-courtlist-api - Silver
+      #   env:
+      #     releaseVersion: ${{ env.releaseVersion }}
+      #     appName: ${{github.event.inputs.app1}}
+      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+      #   run: |
+      #       oc project ${openshiftEnvNamespace}  
+      #       oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
+      #       || true && echo "Rollout in progress"
+      #       oc logs -f dc/${appName} -n ${openshiftEnvNamespace}
+      #       # Get status, returns 0 if rollout is successful
+      #       oc rollout status dc/${appName} -n ${openshiftEnvNamespace} --watch"
