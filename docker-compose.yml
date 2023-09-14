@@ -15,9 +15,9 @@ services:
     ports:
       - "8083:8080"
     environment:
-      - COURTLIST_BASEURL=${COURTLIST_BASEURL:null}
-      - COURTLIST_USERNAME=${COURTLIST_USERNAME:null}
-      - COURTLIST_PASSWORD=${COURTLIST_PASSWORD:null}
-      - ISSUER_URI=${ISSUER_URI:null}
-      - RESOURCE_ID=${RESOURCE_ID:null}
-      - PRINCIPLE_ATTRIBUTE=${PRINCIPLE_ATTRIBUTE:null}
+      - COURTLIST_BASEURL=null
+      - COURTLIST_USERNAME=null
+      - COURTLIST_PASSWORD=null
+      - ISSUER_URI=null
+      - RESOURCE_ID=null
+      - PRINCIPLE_ATTRIBUTE=null
