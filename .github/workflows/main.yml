@@ -5,19 +5,11 @@ name: Main - Build Image and Push to Openshift Registry for Dev Deployment
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      app1:
-        description: 'App Name (justin-courtlist-api)'
-        required: true
-        default: 'justin-courtlist-api'
-      env:
-        type: choice
-        description: Image Target environment
-        options: 
-        - dev
-        required: true
-        default: 'dev'
+  workflow_dispatch: 
+
+env:
+  ENV_NAME: dev
+  APP_NAME: "justin-courtlist-api"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -25,7 +17,7 @@ jobs:
   build-and-push-image:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.env }}
+    environment: ${{ env.ENV_NAME }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -50,15 +42,13 @@ jobs:
       # Prints vital release paramters used
       - name: Print Release Variables
         run: |
-          echo "Release Application: ${{ github.event.inputs.app1 }}"
-          echo "Release Environment: ${{ github.event.inputs.env }}"
-          echo "Release Version: ${{ env.releaseVersion }}"
-          echo "Release Git Sha: ${{env.gitsha}}"
+          echo "Release Application: ${{ env.APP_NAME }}"
+          echo "Release Environment: ${{ env.ENV_NAME }}"
 
       #Build image jag-justin-courtlist-api
       - name: Build image justin-courtlist-api
         run: |
-          docker-compose build ${{github.event.inputs.app1}}
+          docker-compose build ${{ env.APP_NAME }}
       
       #Login to OpenShift Container Repository - Silver
       - name: Login to OpenShift Container Repository - Silver
@@ -71,28 +61,28 @@ jobs:
       #Push image justin-courtlist-api to OpenShift Image stream - Silver
       - name: Push Image justin-courtlist-api to Openshift Image Stream - Silver
         env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{github.event.inputs.app1}}:${{ github.event.inputs.env }}
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:${{ env.ENV_NAME }}
         run: |
-          docker tag ${{github.event.inputs.app1}} ${IMAGE}
+          docker tag ${{ env.APP_NAME }} ${IMAGE}
           docker push ${IMAGE}
       
       # #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Silver
       # - name: Authenticate OC Env Specific SA - Silver
       #   uses: redhat-actions/oc-login@v1
       #   env:
-      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
       #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_NAME}}
       #   with:
       #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL_SILVER}}
       #     openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
-      #     namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+      #     namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
      
       # # start a rollout with latest image
       # - name: Starting rollout to release new version of justin-courtlist-api - Silver
       #   env:
       #     releaseVersion: ${{ env.releaseVersion }}
-      #     appName: ${{github.event.inputs.app1}}
-      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ github.event.inputs.env }}
+      #     appName: ${{ env.APP_NAME }}
+      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
       #   run: |
       #       oc project ${openshiftEnvNamespace}  
       #       oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
