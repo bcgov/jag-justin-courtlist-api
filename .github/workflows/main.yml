@@ -86,8 +86,7 @@ jobs:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{ env.APP_NAME }}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
-        run: |
-            oc project ${openshiftEnvNamespace}  
+        run: |  
             oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
             || true && echo "Rollout in progress"
             oc logs -f dc/${appName} -n ${openshiftEnvNamespace}
