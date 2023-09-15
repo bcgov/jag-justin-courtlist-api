@@ -1,6 +1,6 @@
 # This is the main workflow that creates a new image and push to Openshift image stream which in turn triggers the deployment
 
-name: Main - Build Image and Push to Openshift Registry for Dev Deployment
+name: Main - Build Image, Push to Openshift Registry and Deploy on Dev environment
 
 # Controls when the workflow will run
 on:
@@ -17,7 +17,7 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build and push"
-  build-and-push-image:
+  build-push-and-deploy-image:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: dev
@@ -69,27 +69,27 @@ jobs:
           docker tag ${{ env.APP_NAME }} ${IMAGE}
           docker push ${IMAGE}
       
-      # #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Silver
-      # - name: Authenticate OC Env Specific SA - Silver
-      #   uses: redhat-actions/oc-login@v1
-      #   env:
-      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
-      #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_NAME}}
-      #   with:
-      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL_SILVER}}
-      #     openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
-      #     namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
+      #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Silver
+      - name: Authenticate OC Env Specific SA - Silver
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_NAME}}
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL_SILVER}}
+          openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
      
-      # # start a rollout with latest image
-      # - name: Starting rollout to release new version of justin-courtlist-api - Silver
-      #   env:
-      #     releaseVersion: ${{ env.releaseVersion }}
-      #     appName: ${{ env.APP_NAME }}
-      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
-      #   run: |
-      #       oc project ${openshiftEnvNamespace}  
-      #       oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
-      #       || true && echo "Rollout in progress"
-      #       oc logs -f dc/${appName} -n ${openshiftEnvNamespace}
-      #       # Get status, returns 0 if rollout is successful
-      #       oc rollout status dc/${appName} -n ${openshiftEnvNamespace} --watch"
+      # start a rollout with latest image
+      - name: Starting rollout to release new version of justin-courtlist-api - Silver
+        env:
+          releaseVersion: ${{ env.releaseVersion }}
+          appName: ${{ env.APP_NAME }}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
+        run: |
+            oc project ${openshiftEnvNamespace}  
+            oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
+            || true && echo "Rollout in progress"
+            oc logs -f dc/${appName} -n ${openshiftEnvNamespace}
+            # Get status, returns 0 if rollout is successful
+            oc rollout status dc/${appName} -n ${openshiftEnvNamespace} --watch"
