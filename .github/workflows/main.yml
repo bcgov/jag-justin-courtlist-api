@@ -12,7 +12,7 @@ on:
 
 env:
   ENV_NAME: "dev"
-  APP_NAME: "justin-courtlist-api"
+  APP_NAME: "court-list-ws"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -48,8 +48,8 @@ jobs:
           echo "Release Application: ${{ env.APP_NAME }}"
           echo "Release Environment: ${{ env.ENV_NAME }}"
 
-      #Build image jag-justin-courtlist-api
-      - name: Build image justin-courtlist-api
+      #Build image court-list-ws
+      - name: Build image court-list-ws
         run: |
           docker build -t ${{ env.APP_NAME }} .
       
@@ -62,7 +62,7 @@ jobs:
           password: ${{secrets.OPENSHIFT_SA_PIPELINE_TOKEN_SILVER}}
   
       #Push image justin-courtlist-api to OpenShift Image stream - Silver
-      - name: Push Image justin-courtlist-api to Openshift Image Stream - Silver
+      - name: Push Image court-list-ws to Openshift Image Stream - Silver
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:${{ env.ENV_NAME }}
         run: |
@@ -81,14 +81,14 @@ jobs:
           namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
      
       # start a rollout with latest image
-      - name: Starting rollout to release new version of justin-courtlist-api - Silver
+      - name: Starting rollout to release new version of court-list-ws - Silver
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{ env.APP_NAME }}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-${{ env.ENV_NAME }}
         run: |  
-            oc rollout latest dc/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
+            oc rollout latest deployments/${appName} -n ${openshiftEnvNamespace} 2> /dev/null \
             || true && echo "Rollout in progress"
-            oc logs -f dc/${appName} -n ${openshiftEnvNamespace}
+            oc logs -f deployments/${appName} -n ${openshiftEnvNamespace}
             # Get status, returns 0 if rollout is successful
-            oc rollout status dc/${appName} -n ${openshiftEnvNamespace} --watch"
+            oc rollout status deployments/${appName} -n ${openshiftEnvNamespace} --watch"
