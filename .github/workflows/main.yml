@@ -64,7 +64,7 @@ jobs:
       #Push image justin-courtlist-api to OpenShift Image stream - Silver
       - name: Push Image court-list-ws to Openshift Image Stream - Silver
         env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:${{ env.ENV_NAME }}
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:latest
         run: |
           docker tag ${{ env.APP_NAME }} ${IMAGE}
           docker push ${IMAGE}
