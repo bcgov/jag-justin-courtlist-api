@@ -16,8 +16,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${ISSUER_URI:https://unittest-uri}
-          jwk-set-uri: ${JWK_SET_URI:https://unittest-uri}
+          issuer-uri: ${ISSUER_URI:https://localhost:8081/auth/realms/isb-api}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 courtlist:
   base-url: ${COURTLIST_BASEURL}
   username: ${COURTLIST_USERNAME}
