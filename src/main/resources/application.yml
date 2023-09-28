@@ -16,7 +16,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${ISSUER_URI:https://localhost:8081/auth/realms/isb-api}
+          issuer-uri: ${KEYCLOAK_AUTH_SERVER_URL:https://localhost:8081/auth/realms/isb-api}
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 courtlist:
   base-url: ${COURTLIST_BASEURL}
@@ -28,5 +28,5 @@ courtlist:
 jwt:
   auth:
     converter:
-      resource-id: ${RESOURCE_ID:justin-courtlist-api}
-      principle-attribute: ${PRINCIPLE_ATTRIBUTE:preferred_username}
+      resource-id: ${KEYCLOAK_RESOURCE:justin-courtlist-api}
+

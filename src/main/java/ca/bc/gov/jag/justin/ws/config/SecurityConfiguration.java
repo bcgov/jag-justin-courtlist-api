@@ -22,11 +22,13 @@ class SecurityConfiguration {
         http.csrf(
                 httpSecurityCsrfConfigurer -> {
                     httpSecurityCsrfConfigurer.disable();
+                }).cors(
+                cors -> {
+                    cors.disable();
                 });
 
-        http.authorizeHttpRequests( authorizeRequests -> {
-            authorizeRequests.anyRequest().authenticated();
-            });
+        http.authorizeHttpRequests(requests -> requests
+                .anyRequest().authenticated());
 
         http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
 
