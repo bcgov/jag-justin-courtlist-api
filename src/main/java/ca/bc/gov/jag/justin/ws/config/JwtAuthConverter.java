@@ -24,8 +24,10 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter =
             new JwtGrantedAuthoritiesConverter();
 
-    @Value("${jwt.auth.converter.principle-attribute}")
-    private String principleAttribute;
+    public static final String KEYCLOAK_PRINCIPLE_ATTRIBUTE = "preferred_username";
+    public static final String KEYCLOAK_RESOURCE_ATTRIBUTE = "resource_access";
+    public static final String KEYCLOAK_ROLE_ATTRIBUTE = "roles";
+
     @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
 
@@ -44,11 +46,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     }
 
     private String getPrincipleClaimName(Jwt jwt) {
-        String claimName = JwtClaimNames.SUB;
-        if (principleAttribute != null) {
-            claimName = principleAttribute;
-        }
-        return jwt.getClaim(claimName);
+        return jwt.getClaim(KEYCLOAK_PRINCIPLE_ATTRIBUTE);
     }
 
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
@@ -57,17 +55,17 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         Collection<String> resourceRoles;
 
         Collection<? extends GrantedAuthority> resourceRoles1;
-        if (jwt.getClaim("resource_access") == null) {
+        if (jwt.getClaim(KEYCLOAK_RESOURCE_ATTRIBUTE) == null) {
             return Set.of();
         }
-        resourceAccess = jwt.getClaim("resource_access");
+        resourceAccess = jwt.getClaim(KEYCLOAK_RESOURCE_ATTRIBUTE);
 
         if (resourceAccess.get(resourceId) == null) {
             return Set.of();
         }
         resource = (Map<String, Object>) resourceAccess.get(resourceId);
 
-        resourceRoles = (Collection<String>) resource.get("roles");
+        resourceRoles = (Collection<String>) resource.get(KEYCLOAK_ROLE_ATTRIBUTE);
         return resourceRoles
                 .stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))

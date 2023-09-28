@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -22,11 +24,14 @@ class SecurityConfiguration {
         http.csrf(
                 httpSecurityCsrfConfigurer -> {
                     httpSecurityCsrfConfigurer.disable();
+                }).cors(
+                cors -> {
+                    cors.disable();
                 });
 
-        http.authorizeHttpRequests( authorizeRequests -> {
-            authorizeRequests.anyRequest().authenticated();
-            });
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers(antMatcher("/actuator/**")).permitAll()
+                .anyRequest().authenticated());
 
         http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
 
