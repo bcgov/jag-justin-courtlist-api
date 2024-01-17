@@ -72,7 +72,7 @@ jobs:
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:${{ env.ENV_NAME }}
         run: |
-          docker tag ${{ env.APP_NAME }} ${IMAGE}
+          docker tag justin-court-list-api ${IMAGE}
           docker push ${IMAGE}
       
       # #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Silver
