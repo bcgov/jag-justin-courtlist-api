@@ -57,7 +57,7 @@ jobs:
       #Build image jag-justin-courtlist-api
       - name: Build image justin-courtlist-api
         run: |
-          docker-compose build ${{ env.APP_NAME }}
+          docker-compose build justin-court-list-api
       
       #Login to OpenShift Container Repository - Silver
       - name: Login to OpenShift Container Repository - Silver
