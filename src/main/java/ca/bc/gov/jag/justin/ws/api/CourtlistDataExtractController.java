@@ -47,7 +47,7 @@ public class CourtlistDataExtractController {
 	public ResponseEntity<?> extractData(@RequestParam(value="startDate",required = false) String startDate,
 			@RequestParam(value="endDate",required = false) String endDate) throws CourtlistDataExtractException {
 
-		logger.info("Request for extract from: {}", ((Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("clientId"));
+		logger.info("Request for extract from: {}", ((Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("client_id"));
 
 		return service.extractData(startDate, endDate);
 
