@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>org.springframework.ws</groupId>
 			<artifactId>spring-ws-core</artifactId>
-			<version>4.0.5</version>
+			<version>4.0.14</version>
 		</dependency>
 
 		<dependency>
