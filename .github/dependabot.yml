@@ -3,7 +3,6 @@ updates:
   # Mvn dependencies
   - package-ecosystem: "maven"
     directory: "/"
-    open-pull-requests-limit: 5
     schedule:
       interval: "weekly"
       day: "monday"
