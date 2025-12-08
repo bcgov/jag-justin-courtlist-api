@@ -1,21 +1,9 @@
 package ca.bc.gov.jag.justin.ws.service;
 
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import jakarta.annotation.PostConstruct;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import ca.bc.gov.jag.justin.ws.Keys;
 import ca.bc.gov.jag.justin.ws.config.CourtlistDataExtractProperties;
 import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +17,18 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
-
 import reactor.core.publisher.Mono;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 /**
  *

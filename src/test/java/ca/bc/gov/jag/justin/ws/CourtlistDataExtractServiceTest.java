@@ -1,43 +1,32 @@
 package ca.bc.gov.jag.justin.ws;
 
+import ca.bc.gov.jag.justin.objects.JustinCourtListDataType;
+import ca.bc.gov.jag.justin.objects.PLMSCourtListType;
+import ca.bc.gov.jag.justin.ws.config.CourtlistDataExtractProperties;
+import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
+import ca.bc.gov.jag.justin.ws.service.CourtlistDataExtractService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import ca.bc.gov.jag.justin.ws.config.CourtlistDataExtractProperties;
-import ca.bc.gov.jag.justin.ws.error.CourtlistDataExtractException;
-import ca.bc.gov.jag.justin.ws.service.CourtlistDataExtractService;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ca.bc.gov.jag.justin.objects.*;
-
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
 import static org.mockito.ArgumentMatchers.any;
 
 /**
