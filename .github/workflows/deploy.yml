@@ -28,11 +28,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v3
       
-     #Build image jag-justin-courtlist-api
-      - name: Build image justin-courtlist-api
-        run: |
-          docker compose build justin-court-list-api
-      
       #Login to OpenShift Container Repository - Silver
       - name: Login to OpenShift Container Repository - Silver
         uses: docker/login-action@v2
@@ -44,9 +39,9 @@ jobs:
       - name: Backup Prod
         run: |
           if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-            docker pull ${IMAGE}/justin-courtlist-api:prod
-            docker tag ${IMAGE}/justin-courtlist-api:prod ${IMAGE}/justin-courtlist-api:prod-backup
-            docker push tag ${IMAGE}/justin-courtlist-api:prod-backup
+            docker pull ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:prod
+            docker tag ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:prod ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:prod-backup
+            docker push tag ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:prod-backup
           else
             echo "Application targeted environment: ${{ github.event.inputs.environment }}"
           fi
@@ -56,8 +51,8 @@ jobs:
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/${{ env.APP_NAME }}:${{ env.ENV_NAME }}
         run: |
-          docker pull ${IMAGE}/justin-courtlist-api:${{ github.event.inputs.source }}
-          docker tag ${IMAGE}/justin-courtlist-api:${{ github.event.inputs.source }} ${IMAGE}/justin-courtlist-api:${{ github.event.inputs.environment }}
-          docker push tag ${IMAGE}/justin-courtlist-api:${{ github.event.inputs.environment }}
+          docker pull ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:${{ github.event.inputs.source }}
+          docker tag ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:${{ github.event.inputs.source }} ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:${{ github.event.inputs.environment }}
+          docker push tag ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_LICENSE_PLATE_SILVER}}-tools/justin-courtlist-api:${{ github.event.inputs.environment }}
 
 
