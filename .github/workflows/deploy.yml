@@ -19,7 +19,8 @@ on:
           - test
           - prod
      
-  tag-and-push-image:
+tag-and-push-image:
+  build:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
